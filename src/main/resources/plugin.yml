@@ -4,6 +4,7 @@ main: com.chenyue.mistplugin.MistPlugin
 api-version: '1.20'
 description: Mist Cabin Plugin
 author: ChenYue
+website: 'https://github.com/ChenYueTW/Mist-plugin'
 
 commands:
   eco:
