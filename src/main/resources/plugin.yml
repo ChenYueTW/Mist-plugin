@@ -1,0 +1,14 @@
+name: MistPlugin
+version: '${version}'
+main: com.chenyue.mistplugin.MistPlugin
+api-version: '1.20'
+description: Mist Cabin Plugin
+author: ChenYue
+
+commands:
+  eco:
+    description: money
+    usage: /<command> <helloWorld>
+  chenyueplugin:
+    description: chenplugin
+    usage: /<command> <reload>

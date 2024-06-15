@@ -1,0 +1,4 @@
+# 玩家進入時訊息
+Welcome_MSG: 歡迎進入 工程測試區!
+# Shift + F後執行的指令
+ShiftF_CMD: help
