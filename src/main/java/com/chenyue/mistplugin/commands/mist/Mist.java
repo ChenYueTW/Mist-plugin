@@ -1,23 +1,26 @@
-package com.chenyue.mistplugin.Commands.Eco;
+package com.chenyue.mistplugin.commands.mist;
 
-import com.chenyue.mistplugin.Commands.Eco.SubCommands.HelloWorld;
+import com.chenyue.mistplugin.commands.mist.SubCommands.Reload;
+import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.SubCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Eco implements TabExecutor {
+public class Mist implements TabExecutor, ColorUtils {
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
-    public Eco() {
+    public Mist() {
         // Add SubCommands
-        this.subCommands.add(new HelloWorld());
+        this.subCommands.add(new Reload());
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (args.length > 0) {
             for (int i = 0; i < this.getSubCommands().size(); i++) {
                 if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
@@ -25,15 +28,17 @@ public class Eco implements TabExecutor {
                 }
             }
         } else if (args.length == 0) {
+            sender.sendMessage(color("&b----------&r&4[&r&eMist Plugin&r&4]&r&b----------"));
             for (int i = 0; i < this.getSubCommands().size(); i++) {
-                sender.sendMessage(this.getSubCommands().get(i).getName());
+                sender.sendMessage(this.getSubCommands().get(i).getName() + " - " + this.getSubCommands().get(i).getDescription());
             }
+            sender.sendMessage(color("&b---------------------------------"));
         }
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
             ArrayList<String> subCommandsArguments = new ArrayList<>();
 

@@ -8,8 +8,17 @@ website: 'https://github.com/ChenYueTW/Mist-plugin'
 
 commands:
   eco:
-    description: money
-    usage: /<command> <helloWorld>
-  chenyueplugin:
-    description: chenplugin
-    usage: /<command> <reload>
+    aliases:
+      - economy
+  mist:
+    description: mist Command
+  balance:
+    aliases:
+      - bal
+      - money
+  balancetop:
+    aliases:
+      - baltop
+  pay:
+    description: pay
+

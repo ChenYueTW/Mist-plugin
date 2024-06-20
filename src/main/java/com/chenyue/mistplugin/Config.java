@@ -2,10 +2,7 @@ package com.chenyue.mistplugin;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.File;
-
 public class Config {
-    private static File configFile;
     private static FileConfiguration config;
     private static String welcomeMSG;
     private static String shiftFCmd;
