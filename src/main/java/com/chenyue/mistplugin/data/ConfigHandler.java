@@ -24,6 +24,10 @@ public class ConfigHandler {
         return getConfig().getDouble("stringBalance");
     }
 
+    public static int getHomeLimit() {
+        return getConfig().getInt("Home_Limit");
+    }
+
     public static int getBalanceTopInterval() {
         return getConfig().getInt("BalanceTopTimerInterval");
     }

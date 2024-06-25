@@ -21,46 +21,51 @@ public class Balance implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 0) {
+        if (sender.hasPermission("mist.command.balance")) {
+            if (args.length == 0) {
 
-            if (!(sender instanceof Player)) {
-                StringUtils.sendConfigMessage(sender, "messages.playersOnly");
+                if (!(sender instanceof Player)) {
+                    StringUtils.sendConfigMessage(sender, "messages.playersOnly");
+                    return true;
+                }
+
+                Player player = (Player) sender;
+
+                if (!MistPlugin.getEco().hasAccount(player.getUniqueId())) {
+                    StringUtils.sendConfigMessage(player, "messages.balance.noAccount");
+                    return true;
+                }
+
+                double balance = MistPlugin.getEco().getBalance(player.getUniqueId()).getBalance();
+                StringUtils.sendConfigMessage(player, "messages.balance.balance", ImmutableMap.of(
+                        "%balance%", MistPlugin.format(balance) + ""
+                ));
+
                 return true;
-            }
 
-            Player player = (Player) sender;
+            } else if (args.length == 1) {
+                @NotNull
+                OfflinePlayer other = Bukkit.getOfflinePlayer(args[0]);
 
-            if (!MistPlugin.getEco().hasAccount(player.getUniqueId())) {
-                StringUtils.sendConfigMessage(player, "messages.balance.noAccount");
-                return true;
-            }
+                if (!MistPlugin.getEco().hasAccount(other.getUniqueId())) {
+                    StringUtils.sendConfigMessage(sender, "messages.balance.otherNoAccount", ImmutableMap.of(
+                            "%player%", other.getName()
+                    ));
+                    return true;
+                }
 
-            double balance = MistPlugin.getEco().getBalance(player.getUniqueId()).getBalance();
-            StringUtils.sendConfigMessage(player, "messages.balance.balance", ImmutableMap.of(
-                    "%balance%", MistPlugin.format(balance) + ""
-            ));
-
-            return true;
-
-        } else if (args.length == 1) {
-            @NotNull
-            OfflinePlayer other = Bukkit.getOfflinePlayer(args[0]);
-
-            if (!MistPlugin.getEco().hasAccount(other.getUniqueId())) {
-                StringUtils.sendConfigMessage(sender, "messages.balance.otherNoAccount", ImmutableMap.of(
-                        "%player%", other.getName()
+                double balance = MistPlugin.getEco().getBalance(other.getUniqueId()).getBalance();
+                StringUtils.sendConfigMessage(sender, "messages.balance.otherBalance", ImmutableMap.of(
+                        "%player%", other.getName(),
+                        "%balance%", MistPlugin.format(balance) + ""
                 ));
                 return true;
+            } else {
+                StringUtils.sendConfigMessage(sender, "messages.balance.usage");
+                return true;
             }
-
-            double balance = MistPlugin.getEco().getBalance(other.getUniqueId()).getBalance();
-            StringUtils.sendConfigMessage(sender, "messages.balance.otherBalance", ImmutableMap.of(
-                    "%player%", other.getName(),
-                    "%balance%", MistPlugin.format(balance) + ""
-            ));
-            return true;
         } else {
-            StringUtils.sendConfigMessage(sender, "messages.balance.usage");
+            StringUtils.sendConfigMessage(sender, "messages.noPermission");
             return true;
         }
     }

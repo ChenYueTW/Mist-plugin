@@ -10,7 +10,7 @@ public class MySQL {
     public String database;
     public String username;
     public String password;
-    public Connection connection;
+    public static Connection connection;
 
     public MySQL(String host, int port, String database, String username, String password) {
         this.host = host;
@@ -26,13 +26,13 @@ public class MySQL {
         }
     }
 
-    public void disconnect() throws SQLException {
+    public static void disconnect() throws SQLException {
         if (isConnected()) {
             connection.close();
         }
     }
 
-    public boolean isConnected() {
+    public static boolean isConnected() {
         return (connection == null ? false : true);
     }
 

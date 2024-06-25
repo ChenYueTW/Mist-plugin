@@ -2,6 +2,7 @@ package com.chenyue.mistplugin.commands.eco;
 
 import com.chenyue.mistplugin.commands.eco.SubCommands.*;
 import com.chenyue.mistplugin.utils.ColorUtils;
+import com.chenyue.mistplugin.utils.StringUtils;
 import com.chenyue.mistplugin.utils.SubCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,20 +25,25 @@ public class Eco implements TabExecutor, ColorUtils {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (args.length > 0) {
-            for (int i = 0; i < this.getSubCommands().size(); i++) {
-                if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
-                    this.getSubCommands().get(i).perform(sender, args);
+        if (sender.hasPermission("mist.command.eco") | sender.isOp()) {
+            if (args.length > 0) {
+                for (int i = 0; i < this.getSubCommands().size(); i++) {
+                    if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
+                        this.getSubCommands().get(i).perform(sender, args);
+                    }
                 }
+            } else if (args.length == 0) {
+                sender.sendMessage(color("&b----------&r&4[&r&eMist Plugin&r&4]&r&b----------"));
+                for (int i = 0; i < this.getSubCommands().size(); i++) {
+                    sender.sendMessage(this.getSubCommands().get(i).getName() + " - " + this.getSubCommands().get(i).getDescription());
+                }
+                sender.sendMessage(color("&b------------------------------"));
             }
-        } else if (args.length == 0) {
-            sender.sendMessage(color("&b----------&r&4[&r&eMist Plugin&r&4]&r&b----------"));
-            for (int i = 0; i < this.getSubCommands().size(); i++) {
-                sender.sendMessage(this.getSubCommands().get(i).getName() + " - " + this.getSubCommands().get(i).getDescription());
-            }
-            sender.sendMessage(color("&b------------------------------"));
+            return true;
+        } else {
+            StringUtils.sendConfigMessage(sender, "messages.noPermission");
+            return true;
         }
-        return true;
     }
 
     @Override

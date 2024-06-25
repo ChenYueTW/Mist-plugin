@@ -2,6 +2,8 @@
 Welcome_MSG: "歡迎進入 工程測試區!"
 # Shift + F後執行的指令
 ShiftF_CMD: "help"
+# SetHome上限
+Home_Limit: 5
 
 BalanceTopTimerInterval: 1200
 
@@ -14,7 +16,7 @@ mysql:
   use-mysql: true
   host: "192.168.0.126"
   port: 3306
-  database: "engineering_test"
+  database: "Mist_plugin"
   username: "mist_plugin"
   password: "Chen_gom86660720"
 
@@ -161,3 +163,95 @@ messages:
         - "%prefix% &b%rank%. &a%player%: &b%balance%"
       self:
         - "%prefix% &b%rank%. &a%player%: &b%balance% (YOU)"
+
+  setspawn:
+    usage:
+      - "%prefix% &6/setspawn 創建伺服器Spawn"
+    successful:
+      - "%prefix% &6Spawn設置成功!"
+    fail:
+      - "%prefix% &cSpawn設置失敗"
+
+  delspawn:
+    usage:
+      - "%prefix% &6/delspawn 刪除伺服器Spawn"
+    successful:
+      - "%prefix% &6Spawn刪除成功!"
+    fail:
+      - "%prefix% &cSpawn刪除失敗"
+
+  spawn:
+    usage:
+      - "%prefix% &6/spawn"
+    successful:
+      - "%prefix% &6傳送成功"
+    teleport:
+      - "%prefix% &6你被傳送至Spawn"
+    noLocation:
+      - "%prefix% &c沒有設置Spawn"
+
+  home:
+    successful:
+      - "%prefix% &6傳送成功"
+    failed:
+      - "%prefix% &c傳送失敗"
+    notFound:
+      - "%prefix% &c未找到家"
+
+  sethome:
+    usage:
+      - "%prefix% &6/sethome <Home name>"
+    limitExceeded:
+      - "%prefix% &c家數量已達上限"
+    successful:
+      - "%prefix% &6設定成功"
+    failed:
+      - "%prefix% &c設定失敗"
+
+  delhome:
+    usage:
+      - "%prefix% &6/delhome <Home name>"
+    successful:
+      - "%prefix% &6刪除成功"
+    failed:
+      - "%prefix% &c刪除失敗"
+    notFound:
+      - "%prefix% &c未找到家"
+
+  tp:
+    tpaUsage:
+      - "%prefix% &6/tpa <player>"
+    tpaHereUsage:
+      - "%prefix% &6/tpahere <player>"
+    tpaAcceptUsage:
+      - "%prefix% &6/tpaaccept"
+    tpaCancelUsage:
+      - "%prefix% &6/tpacancel"
+    tpaSendRequest:
+      - "%prefix% &6已發送傳送請求"
+    tpaReceiveRequest:
+      - "%prefix% &6%name% 發送傳送請求 到你身邊"
+    tpaHereSendRequest:
+      - "%prefix% &6已發送傳送請求"
+    tpaHereReceiveRequest:
+      - "%prefix% &6%name% 發送傳送請求 到他身邊"
+    acceptRequest:
+      - "%prefix% &6你接受了傳送請求"
+    cancelRequest:
+      - "%prefix% &6你拒絕了傳送請求"
+    successfulTeleport:
+      - "%prefix% &6傳送成功"
+    requestNotFound:
+      - "%prefix% &e未找到傳送請求"
+    playerNotOnline:
+      - "%prefix% &e找不到玩家"
+
+  back:
+    usage:
+      - "%prefix% &6/back"
+    successful:
+      - "%prefix% &6傳送成功"
+    failed:
+      - "%prefix% &6傳送失敗"
+    notFound:
+      - "%prefix% &e找不到地點"

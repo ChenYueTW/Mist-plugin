@@ -22,78 +22,83 @@ public class BalanceTop implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (args.length < 2) {
-            if (MistPlugin.getBalanceTopRunnable().getBalanceTop().isEmpty()) {
-                StringUtils.sendConfigMessage(sender, "messages.money.top.noAccounts");
-                return true;
-            }
-            int top = 0;
-            if (args.length == 1) {
-                try {
-                    top = Integer.valueOf(args[0]) - 1;
-                } catch (NumberFormatException e) {
+        if (sender.hasPermission("mist.command.balancetop")) {
+            if (args.length < 2) {
+                if (MistPlugin.getBalanceTopRunnable().getBalanceTop().isEmpty()) {
+                    StringUtils.sendConfigMessage(sender, "messages.money.top.noAccounts");
+                    return true;
+                }
+                int top = 0;
+                if (args.length == 1) {
+                    try {
+                        top = Integer.valueOf(args[0]) - 1;
+                    } catch (NumberFormatException e) {
+                        StringUtils.sendConfigMessage(sender, "messages.money.top.invalidTop", ImmutableMap.of(
+                                "%top%", args[0]
+                        ));
+                        return true;
+                    }
+                }
+                if (top < 0) {
                     StringUtils.sendConfigMessage(sender, "messages.money.top.invalidTop", ImmutableMap.of(
                             "%top%", args[0]
                     ));
                     return true;
                 }
-            }
-            if (top < 0) {
-                StringUtils.sendConfigMessage(sender, "messages.money.top.invalidTop", ImmutableMap.of(
-                        "%top%", args[0]
-                ));
-                return true;
-            }
-            List<PlayerBalance> playerBalances = MistPlugin.getBalanceTopRunnable().getBalanceTop();
-            int i = top * 10;
-            int j = 0;
-            while (i < (top + 1) * 10) {
-                if (playerBalances.size() > i) {
-                    PlayerBalance playerBalance = playerBalances.get(i);
-                    OfflinePlayer player = Bukkit.getOfflinePlayer(playerBalance.getUuid());
-                    if (player != null && player.getName() != null) {
-                        StringUtils.sendConfigMessage(sender, "messages.money.top.message", ImmutableMap.of(
-                                "%rank%", i + 1 - j + "",
-                                "%player%", player.getName(),
-                                "%balance%", MistPlugin.format(playerBalance.getBalance()) + ""
-                        ));
-                    } else {
-                        j++;
-                    }
-                } else {
-                    if (i == top * 10) {
-                        StringUtils.sendConfigMessage(sender, "messages.money.top.notEnoughPlayers");
-                        return true;
-                    }
-                }
-                i++;
-            }
-
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                if (MistPlugin.getEco().hasAccount(player.getUniqueId())) {
-                    PlayerBalance playerBalance = null;
-                    int playerIndex = -1;
-                    for (PlayerBalance pb : playerBalances) {
-                        if (pb.getUuid().equals(player.getUniqueId())) {
-                            playerBalance = pb;
-                            playerIndex = playerBalances.indexOf(pb);
-                        }
-                    }
-                    if (playerBalance != null) {
-                        if (playerIndex < top * 10 || playerIndex > (top + 1) * 10) {
-                            StringUtils.sendConfigMessage(sender, "messages.money.top.self", ImmutableMap.of(
-                                    "%rank%", playerIndex + "",
+                List<PlayerBalance> playerBalances = MistPlugin.getBalanceTopRunnable().getBalanceTop();
+                int i = top * 10;
+                int j = 0;
+                while (i < (top + 1) * 10) {
+                    if (playerBalances.size() > i) {
+                        PlayerBalance playerBalance = playerBalances.get(i);
+                        OfflinePlayer player = Bukkit.getOfflinePlayer(playerBalance.getUuid());
+                        if (player != null && player.getName() != null) {
+                            StringUtils.sendConfigMessage(sender, "messages.money.top.message", ImmutableMap.of(
+                                    "%rank%", i + 1 - j + "",
                                     "%player%", player.getName(),
                                     "%balance%", MistPlugin.format(playerBalance.getBalance()) + ""
                             ));
+                        } else {
+                            j++;
+                        }
+                    } else {
+                        if (i == top * 10) {
+                            StringUtils.sendConfigMessage(sender, "messages.money.top.notEnoughPlayers");
+                            return true;
+                        }
+                    }
+                    i++;
+                }
+
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (MistPlugin.getEco().hasAccount(player.getUniqueId())) {
+                        PlayerBalance playerBalance = null;
+                        int playerIndex = -1;
+                        for (PlayerBalance pb : playerBalances) {
+                            if (pb.getUuid().equals(player.getUniqueId())) {
+                                playerBalance = pb;
+                                playerIndex = playerBalances.indexOf(pb);
+                            }
+                        }
+                        if (playerBalance != null) {
+                            if (playerIndex < top * 10 || playerIndex > (top + 1) * 10) {
+                                StringUtils.sendConfigMessage(sender, "messages.money.top.self", ImmutableMap.of(
+                                        "%rank%", playerIndex + "",
+                                        "%player%", player.getName(),
+                                        "%balance%", MistPlugin.format(playerBalance.getBalance()) + ""
+                                ));
+                            }
                         }
                     }
                 }
+                return true;
+            } else {
+                StringUtils.sendConfigMessage(sender, "messages.money.top.usage");
+                return true;
             }
-            return true;
         } else {
-            StringUtils.sendConfigMessage(sender, "messages.money.top.usage");
+            StringUtils.sendConfigMessage(sender, "messages.noPermission");
             return true;
         }
     }

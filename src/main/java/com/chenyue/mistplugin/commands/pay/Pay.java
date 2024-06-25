@@ -22,65 +22,70 @@ public class Pay implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (!(args.length == 2)) {
-            StringUtils.sendConfigMessage(sender, "messages.money.pay.usage");
-            return true;
-        } else {
-            if (!(sender instanceof Player)) {
-                StringUtils.sendConfigMessage(sender, "messages.playersOnly");
+        if (sender.hasPermission("mist.command.pay")) {
+            if (!(args.length == 2)) {
+                StringUtils.sendConfigMessage(sender, "messages.money.pay.usage");
                 return true;
-            }
-            Player player = (Player) sender;
-            if (!MistPlugin.getEco().hasAccount(player.getUniqueId())) {
-                StringUtils.sendConfigMessage(player, "messages.money.pay.noAccount");
-                return true;
-            }
-            OfflinePlayer other = Bukkit.getOfflinePlayer(args[0]);
-            if (other == null) {
-                StringUtils.sendConfigMessage(player, "messages.money.pay.otherDoesntExist", ImmutableMap.of(
-                        "%player%", args[1]
-                ));
-                return true;
-            }
-            if (!MistPlugin.getEco().hasAccount(other.getUniqueId())) {
-                StringUtils.sendConfigMessage(player, "messages.money.pay.otherNoAccount", ImmutableMap.of(
-                        "%player%", other.getName()
-                ));
-                return true;
-            }
-            if (other.getUniqueId().equals(player.getUniqueId())) {
-                StringUtils.sendConfigMessage(player, "messages.money.pay.cannotPaySelf");
-                return true;
-            }
-            double amount = 0;
-            try {
-                amount = MistPlugin.getAmountFromString(args[1]);
-            } catch (NumberFormatException e) {
-                StringUtils.sendConfigMessage(player, "messages.money.pay.invalidAmount", ImmutableMap.of(
-                        "%amount%", args[1]
-                ));
-                return true;
-            }
-            if (amount <= 0) {
-                StringUtils.sendConfigMessage(sender, "messages.money.pay.invalidAmount", ImmutableMap.of());
-                return true;
-            }
-            if (!MistPlugin.getEco().has(player.getUniqueId(), amount)) {
-                StringUtils.sendConfigMessage(player, "messages.money.pay.insufficientFunds");
-                return true;
-            }
-            MistPlugin.getEco().withdraw(player.getUniqueId(), amount);
-            StringUtils.sendConfigMessage(player, "messages.money.pay.paid", ImmutableMap.of(
-                    "%player%", other.getName(),
-                    "%amount%", MistPlugin.format(amount)
-            ));
-            MistPlugin.getEco().deposit(other.getUniqueId(), amount);
-            if (other instanceof Player) {
-                StringUtils.sendConfigMessage((Player) other, "messages.money.pay.received", ImmutableMap.of(
-                        "%player%", player.getName(),
+            } else {
+                if (!(sender instanceof Player)) {
+                    StringUtils.sendConfigMessage(sender, "messages.playersOnly");
+                    return true;
+                }
+                Player player = (Player) sender;
+                if (!MistPlugin.getEco().hasAccount(player.getUniqueId())) {
+                    StringUtils.sendConfigMessage(player, "messages.money.pay.noAccount");
+                    return true;
+                }
+                OfflinePlayer other = Bukkit.getOfflinePlayer(args[0]);
+                if (other == null) {
+                    StringUtils.sendConfigMessage(player, "messages.money.pay.otherDoesntExist", ImmutableMap.of(
+                            "%player%", args[1]
+                    ));
+                    return true;
+                }
+                if (!MistPlugin.getEco().hasAccount(other.getUniqueId())) {
+                    StringUtils.sendConfigMessage(player, "messages.money.pay.otherNoAccount", ImmutableMap.of(
+                            "%player%", other.getName()
+                    ));
+                    return true;
+                }
+                if (other.getUniqueId().equals(player.getUniqueId())) {
+                    StringUtils.sendConfigMessage(player, "messages.money.pay.cannotPaySelf");
+                    return true;
+                }
+                double amount = 0;
+                try {
+                    amount = MistPlugin.getAmountFromString(args[1]);
+                } catch (NumberFormatException e) {
+                    StringUtils.sendConfigMessage(player, "messages.money.pay.invalidAmount", ImmutableMap.of(
+                            "%amount%", args[1]
+                    ));
+                    return true;
+                }
+                if (amount <= 0) {
+                    StringUtils.sendConfigMessage(sender, "messages.money.pay.invalidAmount", ImmutableMap.of());
+                    return true;
+                }
+                if (!MistPlugin.getEco().has(player.getUniqueId(), amount)) {
+                    StringUtils.sendConfigMessage(player, "messages.money.pay.insufficientFunds");
+                    return true;
+                }
+                MistPlugin.getEco().withdraw(player.getUniqueId(), amount);
+                StringUtils.sendConfigMessage(player, "messages.money.pay.paid", ImmutableMap.of(
+                        "%player%", other.getName(),
                         "%amount%", MistPlugin.format(amount)
                 ));
+                MistPlugin.getEco().deposit(other.getUniqueId(), amount);
+                if (other instanceof Player) {
+                    StringUtils.sendConfigMessage((Player) other, "messages.money.pay.received", ImmutableMap.of(
+                            "%player%", player.getName(),
+                            "%amount%", MistPlugin.format(amount)
+                    ));
+                }
+                return true;
             }
+        } else {
+            StringUtils.sendConfigMessage(sender, "messages.noPermission");
             return true;
         }
     }

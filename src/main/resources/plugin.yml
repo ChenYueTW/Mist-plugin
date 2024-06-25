@@ -21,4 +21,57 @@ commands:
       - baltop
   pay:
     description: pay
+  spawn:
+    description: spawn
+  setspawn:
+    description: setSpawn
+  delspawn:
+    description: delSpawn
+  home:
+    description: home
+  sethome:
+    description: sethome
+  delhome:
+    description: delhome
+  tpa:
+    description: tpa
+  tpahere:
+    description: tpahere
+  tpaaccept:
+    description: tpaAccept
+  tpacancel:
+    description: tpaCancel
+  back:
+    description: back
 
+permissions:
+  mist.command.balance:
+    default: true
+  mist.command.balancetop:
+    default: true
+  mist.command.pay:
+    default: true
+  mist.command.eco:
+    default: op
+  mist.command.spawn:
+    default: true
+  mist.command.setspawn:
+    default: op
+  mist.command.delspawn:
+    default: op
+  mist.command.home:
+    default: true
+  mist.command.sethome:
+    default: true
+  mist.command.delhome:
+    default: true
+  mist.command.tpa:
+    default: true
+  mist.command.tpahere:
+    default: true
+  mist.command.tpaaccept:
+    default: true
+  mist.command.tpacancel:
+    default: true
+  mist.command.back:
+    default: true
