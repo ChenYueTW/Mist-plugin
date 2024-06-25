@@ -24,7 +24,7 @@ import com.chenyue.mistplugin.events.LocationEvent;
 import com.chenyue.mistplugin.events.PlayerEvent;
 import com.chenyue.mistplugin.events.ShiftFEvent;
 import com.chenyue.mistplugin.runnables.BalanceTopRunnable;
-import com.chenyue.mistplugin.tpahere.TpaHere;
+import com.chenyue.mistplugin.commands.tpahere.TpaHere;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

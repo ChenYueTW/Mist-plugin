@@ -1,4 +1,4 @@
-package com.chenyue.mistplugin.tpahere;
+package com.chenyue.mistplugin.commands.tpahere;
 
 import com.chenyue.mistplugin.data.TpManager;
 import com.chenyue.mistplugin.utils.StringUtils;
