@@ -3,6 +3,7 @@ package com.chenyue.mistplugin.commands.tpahere;
 import com.chenyue.mistplugin.data.TpManager;
 import com.chenyue.mistplugin.utils.StringUtils;
 import com.google.common.collect.ImmutableMap;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,10 +39,13 @@ public class TpaHere implements TabExecutor {
                     return true;
                 }
 
+                TextComponent accept = new TextComponent("【同意】");
+                TextComponent deny = new TextComponent("【拒絕】");
+
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaHereSendRequest");
                 StringUtils.sendConfigMessage(targetPlayer, "messages.tp.tpaHereReceiveRequest", ImmutableMap.of(
                         "%name%", player.getName()
-                ));
+                ), accept, deny);
                 return true;
             } else {
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaHereUsage");

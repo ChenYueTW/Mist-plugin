@@ -3,6 +3,9 @@ package com.chenyue.mistplugin.commands.tpa;
 import com.chenyue.mistplugin.data.TpManager;
 import com.chenyue.mistplugin.utils.StringUtils;
 import com.google.common.collect.ImmutableMap;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,10 +14,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class Tpa implements TabExecutor {
     private final TpManager tpManager;
@@ -41,10 +41,13 @@ public class Tpa implements TabExecutor {
                     return true;
                 }
 
+                TextComponent accept = new TextComponent("【同意】");
+                TextComponent deny = new TextComponent("【拒絕】");
+
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaSendRequest");
                 StringUtils.sendConfigMessage(targetPlayer, "messages.tp.tpaReceiveRequest", ImmutableMap.of(
                         "%name%", player.getName()
-                ));
+                ), accept, deny);
                 return true;
             } else {
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaUsage");
