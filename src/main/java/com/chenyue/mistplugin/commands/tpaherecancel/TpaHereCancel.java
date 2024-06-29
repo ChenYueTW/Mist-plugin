@@ -1,4 +1,4 @@
-package com.chenyue.mistplugin.commands.tpacancel;
+package com.chenyue.mistplugin.commands.tpaherecancel;
 
 import com.chenyue.mistplugin.data.TpManager;
 import com.chenyue.mistplugin.utils.StringUtils;
@@ -12,23 +12,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public class TpaCancel implements TabExecutor {
+public class TpaHereCancel implements TabExecutor {
     private final TpManager tpManager;
 
-    public TpaCancel(TpManager tpManager) {
+    public TpaHereCancel(TpManager tpManager) {
         this.tpManager = tpManager;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (sender.hasPermission("mist.command.tpacancel")) {
+        if (sender.hasPermission("mist.command.tpaherecancel")) {
             if (!(sender instanceof Player)) {
                 StringUtils.sendConfigMessage(sender, "messages.playerOnly");
                 return true;
             } else {
                 Player player = (Player) sender;
                 if (args.length == 0) {
-                    this.tpManager.cancelTpaRequest(player);
+                    this.tpManager.cancelTpaHereRequest(player);
                     return true;
                 } else {
                     StringUtils.sendConfigMessage(player, "messages.tp.tpaCancelUsage");

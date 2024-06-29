@@ -41,8 +41,20 @@ commands:
     description: tpaAccept
   tpacancel:
     description: tpaCancel
+  tpahereaccept:
+    description: tpaHereAccept
+  tpaherecancel:
+    description: tpaHereCancel
   back:
     description: back
+  homevip:
+    description: Home VIP
+  setwarp:
+    description: Set warp
+  delwarp:
+    description: Delete warp
+  warp:
+    description: tp to warp
 
 permissions:
   mist.command.balance:
@@ -73,5 +85,17 @@ permissions:
     default: true
   mist.command.tpacancel:
     default: true
+  mist.command.tpahereaccept:
+    default: true
+  mist.command.tpaherecancel:
+    default: true
   mist.command.back:
+    default: true
+  mist.command.vip:
+    default: false
+  mist.command.setwarp:
+    default: false
+  mist.command.delwarp:
+    default: false
+  mist.command.warp:
     default: true

@@ -44,6 +44,8 @@ messages:
     - "%prefix% &c你沒有權限那樣做"
   playersOnly:
     - "%prefix% &c只有玩家才能此執行命令"
+  notVIP:
+    - "%prefix% &c你不是VIP"
 
   balance:
     usage:
@@ -255,3 +257,39 @@ messages:
       - "%prefix% &6傳送失敗"
     notFound:
       - "%prefix% &e找不到地點"
+
+  homeVIP:
+    usage:
+      - "%prefix% &6/homevip <homename> <blockID>"
+    invalid:
+      - "%prefix% &c無效方塊ID"
+    successful:
+      - "%prefix% &6成功設置家 %homename% 的方塊ID為 %blockID%"
+    failed:
+      - "%prefix% &e設置失敗"
+
+  setwarp:
+    usage:
+      - "%prefix% &6/setwarp <warpname>"
+    successful:
+      - "%prefix% &6Warp設置成功"
+    failed:
+      - "%prefix% &cWarp設置失敗"
+
+  delwarp:
+    usage:
+      - "%prefix% &6/delwarp <warpname>"
+    successful:
+      - "%prefix% &6Warp刪除成功"
+    failed:
+      - "%prefix% &6Warp刪除失敗"
+    notFound:
+      - "%prefix% &6沒有此Warp"
+
+  warp:
+    usage:
+      - "%prefix% &6/warp <warpname>"
+    successful:
+      - "%prefix% &6傳送成功"
+    failed:
+      - "%prefix% &6傳送失敗"

@@ -42,10 +42,12 @@ public class TpaHere implements TabExecutor {
                 TextComponent accept = new TextComponent("【同意】");
                 TextComponent deny = new TextComponent("【拒絕】");
 
+                // "已發送請求"
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaHereSendRequest");
+                // "%player% 傳送了請求 是否同意"
                 StringUtils.sendConfigMessage(targetPlayer, "messages.tp.tpaHereReceiveRequest", ImmutableMap.of(
                         "%name%", player.getName()
-                ), accept, deny);
+                ), accept, "/tpahereaccept", deny, "/tpaherecancel");
                 return true;
             } else {
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaHereUsage");

@@ -28,7 +28,7 @@ public class TpaAccept implements TabExecutor {
             } else {
                 Player player = (Player) sender;
                 if (args.length == 0) {
-                    this.tpManager.acceptRequest(player);
+                    this.tpManager.acceptTpaRequest(player);
                     return true;
                 } else {
                     StringUtils.sendConfigMessage(player, "messages.tp.tpaAcceptUsage");

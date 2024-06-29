@@ -8,12 +8,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -96,7 +98,7 @@ public class HomeManager {
 
     public Map<String, Location> getHomes(UUID uuid) throws IOException {
         File homeFile = new File(playerHomeDir, uuid + ".json");
-        Map<String, Location> homesMap = new ConcurrentHashMap<>();
+        Map<String, Location> homesMap = new HashMap<>();
 
         if (homeFile.exists()) {
             JsonObject homes = JsonParser.parseReader(new FileReader(homeFile)).getAsJsonObject();
@@ -119,5 +121,38 @@ public class HomeManager {
 
     public int getHomeCount(UUID uuid) throws IOException {
         return this.getHomes(uuid).size();
+    }
+
+    public Map<String, Material> getHomeBlocks(UUID uuid) throws IOException {
+        File homeFile = new File(playerHomeDir, uuid + ".json");
+        Map<String, Material> homeBlocks = new HashMap<>();
+
+        if (homeFile.exists()) {
+            JsonObject homes = JsonParser.parseReader(new FileReader(homeFile)).getAsJsonObject();
+
+            for (Map.Entry<String, ?> entry : homes.entrySet()) {
+                JsonObject homeData = (JsonObject) entry.getValue();
+                if (homeData.has("blockID")) {
+                    homeBlocks.put(entry.getKey(), Material.getMaterial(homeData.get("blockID").getAsString()));
+                }
+            }
+        }
+        return homeBlocks;
+    }
+
+    public void setHomeBlock(UUID uuid, String homeName, Material blockID) throws IOException {
+        File homeFile = new File(playerHomeDir, uuid + ".json");
+        JsonObject homes;
+
+        homes = homeFile.exists() ? JsonParser.parseReader(new FileReader(homeFile)).getAsJsonObject() : new JsonObject();
+
+        JsonObject homeData = homes.has(homeName) ? homes.getAsJsonObject(homeName) : new JsonObject();
+        homeData.addProperty("blockID", blockID.name());
+        homes.add(homeName, homeData);
+
+        try (FileWriter writer = new FileWriter(homeFile)) {
+//            writer.write(homes.toString());
+            this.gson.toJson(homes, writer);
+        }
     }
 }

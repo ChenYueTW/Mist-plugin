@@ -93,11 +93,11 @@ public class StringUtils {
         }
     }
 
-    public static void sendConfigMessage(@NotNull CommandSender sender, @NotNull String path, @NotNull ImmutableMap<String, String> placeholders, @NotNull TextComponent accept, @NotNull TextComponent deny) {
+    public static void sendConfigMessage(@NotNull CommandSender sender, @NotNull String path, @NotNull ImmutableMap<String, String> placeholders, @NotNull TextComponent accept, @NotNull String acceptCmd, @NotNull TextComponent deny, @NotNull String denyCmd) {
         accept.setColor(net.md_5.bungee.api.ChatColor.GREEN);
         deny.setColor(net.md_5.bungee.api.ChatColor.RED);
-        accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaaccept"));
-        deny.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpacancel"));
+        accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, acceptCmd));
+        deny.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, denyCmd));
         accept.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("點擊以同意傳送請求")));
         deny.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("點擊以拒絕傳送請求")));
 

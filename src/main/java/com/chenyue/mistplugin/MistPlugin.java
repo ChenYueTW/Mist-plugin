@@ -5,24 +5,28 @@ import com.chenyue.mistplugin.commands.balance.Balance;
 import com.chenyue.mistplugin.commands.balanceTop.BalanceTop;
 import com.chenyue.mistplugin.commands.delhome.DelHome;
 import com.chenyue.mistplugin.commands.delspawn.DelSpawn;
+import com.chenyue.mistplugin.commands.delwarp.DelWarp;
 import com.chenyue.mistplugin.commands.eco.Eco;
 import com.chenyue.mistplugin.commands.home.Home;
+import com.chenyue.mistplugin.commands.homevip.HomeVIP;
 import com.chenyue.mistplugin.commands.mist.Mist;
 import com.chenyue.mistplugin.commands.pay.Pay;
 import com.chenyue.mistplugin.commands.sethome.SetHome;
 import com.chenyue.mistplugin.commands.setspawn.SetSpawn;
+import com.chenyue.mistplugin.commands.setwarp.SetWarp;
 import com.chenyue.mistplugin.commands.spawn.Spawn;
 import com.chenyue.mistplugin.commands.tpa.Tpa;
 import com.chenyue.mistplugin.commands.tpaaccept.TpaAccept;
 import com.chenyue.mistplugin.commands.tpacancel.TpaCancel;
+import com.chenyue.mistplugin.commands.tpahereaccept.TpaHereAccept;
+import com.chenyue.mistplugin.commands.tpaherecancel.TpaHereCancel;
+import com.chenyue.mistplugin.commands.warp.Warp;
 import com.chenyue.mistplugin.data.*;
 import com.chenyue.mistplugin.economy.Economy;
 import com.chenyue.mistplugin.economy.SQLEconomy;
 import com.chenyue.mistplugin.economy.VaultImpl;
 import com.chenyue.mistplugin.economy.YamlEconomy;
-import com.chenyue.mistplugin.events.LocationEvent;
-import com.chenyue.mistplugin.events.PlayerEvent;
-import com.chenyue.mistplugin.events.ShiftFEvent;
+import com.chenyue.mistplugin.events.*;
 import com.chenyue.mistplugin.runnables.BalanceTopRunnable;
 import com.chenyue.mistplugin.commands.tpahere.TpaHere;
 import org.bukkit.Bukkit;
@@ -49,6 +53,7 @@ public final class MistPlugin extends JavaPlugin {
     private static HomeManager homeManager;
     private static TpManager tpManager;
     private static LocationManager locationManager;
+    private static WarpManager warpManager;
 
     @Override
     public void onEnable() {
@@ -62,6 +67,7 @@ public final class MistPlugin extends JavaPlugin {
         homeManager = new HomeManager();
         tpManager = new TpManager();
         locationManager = new LocationManager();
+        warpManager = new WarpManager();
         suffixes = ConfigHandler.getSuffixes();
         vaultImpl = new VaultImpl();
 
@@ -90,19 +96,27 @@ public final class MistPlugin extends JavaPlugin {
         this.getCommand("spawn").setExecutor(new Spawn(this));
         this.getCommand("setspawn").setExecutor(new SetSpawn(this));
         this.getCommand("delspawn").setExecutor(new DelSpawn(this));
-        this.getCommand("home").setExecutor(new Home(homeManager));
+        this.getCommand("home").setExecutor(new Home(homeManager, new HomeGUI(homeManager)));
         this.getCommand("sethome").setExecutor(new SetHome(homeManager));
         this.getCommand("delhome").setExecutor(new DelHome(homeManager));
+        this.getCommand("homevip").setExecutor(new HomeVIP(homeManager));
         this.getCommand("tpa").setExecutor(new Tpa(tpManager));
         this.getCommand("tpahere").setExecutor(new TpaHere(tpManager));
         this.getCommand("tpaaccept").setExecutor(new TpaAccept(tpManager));
         this.getCommand("tpacancel").setExecutor(new TpaCancel(tpManager));
+        this.getCommand("tpahereaccept").setExecutor(new TpaHereAccept(tpManager));
+        this.getCommand("tpaherecancel").setExecutor(new TpaHereCancel(tpManager));
         this.getCommand("back").setExecutor(new Back(locationManager));
+        this.getCommand("warp").setExecutor(new Warp(warpManager, new WarpGUI(warpManager)));
+        this.getCommand("setwarp").setExecutor(new SetWarp(warpManager));
+        this.getCommand("delwarp").setExecutor(new DelWarp(warpManager));
 
         // Listener
         this.getServer().getPluginManager().registerEvents(new ShiftFEvent(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerEvent(), this);
         this.getServer().getPluginManager().registerEvents(new LocationEvent(locationManager), this);
+        this.getServer().getPluginManager().registerEvents(new HomeGUI(homeManager), this);
+        this.getServer().getPluginManager().registerEvents(new WarpGUI(warpManager), this);
 
         // Enabled
         this.getLogger().info("Plugin enabled");

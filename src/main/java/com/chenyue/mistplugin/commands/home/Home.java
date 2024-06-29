@@ -1,6 +1,7 @@
 package com.chenyue.mistplugin.commands.home;
 
 import com.chenyue.mistplugin.data.HomeManager;
+import com.chenyue.mistplugin.events.HomeGUI;
 import com.chenyue.mistplugin.utils.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -17,9 +18,11 @@ import java.util.Map;
 
 public class Home implements TabExecutor {
     private final HomeManager homeManager;
+    private final HomeGUI homeGUI;
 
-    public Home(HomeManager homeManager) {
+    public Home(HomeManager homeManager, HomeGUI homeGUI) {
         this.homeManager = homeManager;
+        this.homeGUI = homeGUI;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class Home implements TabExecutor {
                 }
                 return true;
             } else {
-                // TODO
+                this.homeGUI.openHomeGUI(player);
                 return true;
             }
         } else {

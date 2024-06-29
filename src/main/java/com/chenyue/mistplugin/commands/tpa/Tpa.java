@@ -32,10 +32,11 @@ public class Tpa implements TabExecutor {
             }
             Player player = (Player) sender;
             if (args.length == 1) {
+                // 要被傳送的
                 Player targetPlayer = Bukkit.getServer().getPlayer(args[0]);
 
                 try {
-                    this.tpManager.addTpaRequest(targetPlayer.getUniqueId(), player.getUniqueId());
+                    this.tpManager.addTpaRequest(player.getUniqueId(), targetPlayer.getUniqueId());
                 } catch (Exception e) {
                     StringUtils.sendConfigMessage(sender, "messages.tp.playerNotOnline");
                     return true;
@@ -44,10 +45,12 @@ public class Tpa implements TabExecutor {
                 TextComponent accept = new TextComponent("【同意】");
                 TextComponent deny = new TextComponent("【拒絕】");
 
+                // "已發送請求"
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaSendRequest");
+                // "%player% 傳送了請求 是否同意"
                 StringUtils.sendConfigMessage(targetPlayer, "messages.tp.tpaReceiveRequest", ImmutableMap.of(
                         "%name%", player.getName()
-                ), accept, deny);
+                ), accept, "/tpaaccept", deny, "/tpacancel");
                 return true;
             } else {
                 StringUtils.sendConfigMessage(player, "messages.tp.tpaUsage");
