@@ -31,7 +31,7 @@ public class TpaHereAccept implements TabExecutor {
                     this.tpManager.acceptTpaHereRequest(player);
                     return true;
                 } else {
-                    StringUtils.sendConfigMessage(player, "messages.tp.tpaAcceptUsage");
+                    StringUtils.sendConfigMessage(player, "messages.tp.tpaHereAcceptUsage");
                     return true;
                 }
             }

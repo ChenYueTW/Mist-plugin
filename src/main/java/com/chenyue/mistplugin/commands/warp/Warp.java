@@ -3,6 +3,7 @@ package com.chenyue.mistplugin.commands.warp;
 import com.chenyue.mistplugin.data.WarpManager;
 import com.chenyue.mistplugin.events.WarpGUI;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,9 +39,16 @@ public class Warp implements TabExecutor {
                 String warpName = args[0];
                 Location warpLocation = this.warpManager.getWarp(warpName);
 
+                if (warpLocation == null) {
+                    StringUtils.sendConfigMessage(player, "messages.warp.notFound");
+                    return true;
+                }
+
                 player.teleport(warpLocation);
                 player.setFallDistance(0);
-                StringUtils.sendConfigMessage(player, "messages.warp.successful");
+                StringUtils.sendConfigMessage(player, "messages.warp.successful", ImmutableMap.of(
+                        "%name%", warpName
+                ));
                 return true;
             } else {
                 StringUtils.sendConfigMessage(player, "messages.warp.usage");

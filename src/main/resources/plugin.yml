@@ -5,6 +5,8 @@ api-version: '1.20'
 description: Mist Cabin Plugin
 author: ChenYue
 website: 'https://github.com/ChenYueTW/Mist-plugin'
+depend:
+  - PlaceholderAPI
 
 commands:
   eco:
@@ -55,6 +57,16 @@ commands:
     description: Delete warp
   warp:
     description: tp to warp
+  ban:
+    description: ban Player
+  tempban:
+    description: tempban Player
+  unban:
+    description: unBan Player
+  hat:
+    description: hat
+  suicide:
+    description: suicide
 
 permissions:
   mist.command.balance:
@@ -98,4 +110,12 @@ permissions:
   mist.command.delwarp:
     default: false
   mist.command.warp:
+    default: true
+  mist.command.ban:
+    default: op
+  mist.command.tempban:
+    default: op
+  mist.command.unban:
+    default: op
+  mist.command.suicide:
     default: true

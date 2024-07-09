@@ -2,6 +2,7 @@ package com.chenyue.mistplugin.data;
 
 import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -67,7 +68,9 @@ public class WarpManager {
         File file = new File(this.warpDir, name + ".json");
         if (file.exists()) {
             file.delete();
-            StringUtils.sendConfigMessage(player, "messages.delwarp.successful");
+            StringUtils.sendConfigMessage(player, "messages.delwarp.successful", ImmutableMap.of(
+                    "%name%", name
+            ));
         } else {
             StringUtils.sendConfigMessage(player, "messages.delwarp.notFound");
         }

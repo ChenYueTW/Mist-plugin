@@ -48,6 +48,7 @@ public class BalanceTop implements TabExecutor {
                 List<PlayerBalance> playerBalances = MistPlugin.getBalanceTopRunnable().getBalanceTop();
                 int i = top * 10;
                 int j = 0;
+                StringUtils.sendConfigMessage(sender, "messages.money.top.messageHeader");
                 while (i < (top + 1) * 10) {
                     if (playerBalances.size() > i) {
                         PlayerBalance playerBalance = playerBalances.get(i);
@@ -83,7 +84,7 @@ public class BalanceTop implements TabExecutor {
                         }
                         if (playerBalance != null) {
                             if (playerIndex < top * 10 || playerIndex > (top + 1) * 10) {
-                                StringUtils.sendConfigMessage(sender, "messages.money.top.self", ImmutableMap.of(
+                                StringUtils.sendConfigMessage(player, "messages.money.top.self", ImmutableMap.of(
                                         "%rank%", playerIndex + "",
                                         "%player%", player.getName(),
                                         "%balance%", MistPlugin.format(playerBalance.getBalance()) + ""

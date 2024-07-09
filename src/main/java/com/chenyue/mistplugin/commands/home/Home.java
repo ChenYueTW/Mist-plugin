@@ -35,9 +35,9 @@ public class Home implements TabExecutor {
             Player player = (Player) sender;
             // Usage
             if (args.length == 1) {
-                String home = args[0];
+                String homeName = args[0];
                 try {
-                    this.homeManager.teleportHome(player, home);
+                    this.homeManager.teleportHome(player, homeName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

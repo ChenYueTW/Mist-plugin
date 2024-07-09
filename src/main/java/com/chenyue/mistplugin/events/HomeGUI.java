@@ -3,6 +3,7 @@ package com.chenyue.mistplugin.events;
 import com.chenyue.mistplugin.data.HomeManager;
 import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -43,7 +44,7 @@ public class HomeGUI implements Listener, ColorUtils {
         for (Map.Entry<String, Location> entry : homes.entrySet()) {
             String homeName = entry.getKey();
             Location location = entry.getValue();
-            Material material = homeBlock.getOrDefault(homeName, this.getDefaultMaterial(location));
+            Material material = homeBlock != null ? homeBlock.getOrDefault(homeName, this.getDefaultMaterial(location)) : this.getDefaultMaterial(location);
             ChatColor chatColor;
             String worldName;
 
@@ -110,7 +111,9 @@ public class HomeGUI implements Listener, ColorUtils {
             Location loc = homes.get(homeName);
             player.teleport(loc);
             player.setFallDistance(0);
-            StringUtils.sendConfigMessage(player, "messages.home.successful");
+            StringUtils.sendConfigMessage(player, "messages.home.successful", ImmutableMap.of(
+                    "%home%", homeName
+            ));
         } else {
             StringUtils.sendConfigMessage(player, "messages.home.notFound");
         }

@@ -2,6 +2,7 @@ package com.chenyue.mistplugin.data;
 
 import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -28,15 +29,15 @@ public class HomeManager {
         if (!playerHomeDir.exists()) playerHomeDir.mkdirs();
     }
 
-    public void teleportHome(Player player, String name) throws IOException {
+    public void teleportHome(Player player, String homeName) throws IOException {
         File homeFile = new File(playerHomeDir, player.getUniqueId() + ".json");
         JsonObject homes;
 
         // 檢查有沒有玩家UUID的JSON
         homes = homeFile.exists() ? JsonParser.parseReader(new FileReader(homeFile)).getAsJsonObject() : new JsonObject();
 
-        if (homes.has(name)) {
-            JsonObject home = homes.getAsJsonObject(name);
+        if (homes.has(homeName)) {
+            JsonObject home = homes.getAsJsonObject(homeName);
             double x = home.getAsJsonPrimitive("x").getAsDouble();
             double y = home.getAsJsonPrimitive("y").getAsDouble();
             double z = home.getAsJsonPrimitive("z").getAsDouble();
@@ -47,7 +48,9 @@ public class HomeManager {
 
             player.teleport(location);
             player.setFallDistance(0);
-            StringUtils.sendConfigMessage(player, "messages.home.successful");
+            StringUtils.sendConfigMessage(player, "messages.home.successful", ImmutableMap.of(
+                    "%home%", homeName
+            ));
         } else {
             StringUtils.sendConfigMessage(player, "messages.home.notFound");
         }
@@ -86,7 +89,9 @@ public class HomeManager {
             homes.remove(name);
             try (FileWriter writer = new FileWriter(homeFile)) {
                 this.gson.toJson(homes, writer);
-                StringUtils.sendConfigMessage(player, "messages.delhome.successful");
+                StringUtils.sendConfigMessage(player, "messages.delhome.successful", ImmutableMap.of(
+                        "%home%", name
+                ));
             } catch (IOException e) {
                 e.printStackTrace();
                 StringUtils.sendConfigMessage(player, "messages.delhome.failed");

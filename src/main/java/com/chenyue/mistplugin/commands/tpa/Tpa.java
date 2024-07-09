@@ -46,10 +46,12 @@ public class Tpa implements TabExecutor {
                 TextComponent deny = new TextComponent("【拒絕】");
 
                 // "已發送請求"
-                StringUtils.sendConfigMessage(player, "messages.tp.tpaSendRequest");
+                StringUtils.sendConfigMessage(player, "messages.tp.tpaSendRequest", ImmutableMap.of(
+                        "%player%", targetPlayer.getName()
+                ));
                 // "%player% 傳送了請求 是否同意"
                 StringUtils.sendConfigMessage(targetPlayer, "messages.tp.tpaReceiveRequest", ImmutableMap.of(
-                        "%name%", player.getName()
+                        "%player%", player.getName()
                 ), accept, "/tpaaccept", deny, "/tpacancel");
                 return true;
             } else {

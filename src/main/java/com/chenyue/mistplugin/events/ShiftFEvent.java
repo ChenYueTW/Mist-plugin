@@ -1,6 +1,6 @@
 package com.chenyue.mistplugin.events;
 
-import com.chenyue.mistplugin.Config;
+import com.chenyue.mistplugin.data.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +15,6 @@ public class ShiftFEvent implements Listener {
 
         event.setCancelled(true);
 
-        Bukkit.dispatchCommand(player, Config.getShiftFCmd());
+        Bukkit.dispatchCommand(player, ConfigHandler.getShiftFCommand());
     }
 }

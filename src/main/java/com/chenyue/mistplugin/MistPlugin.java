@@ -1,12 +1,15 @@
 package com.chenyue.mistplugin;
 
+import com.chenyue.mistplugin.api.BalTop;
 import com.chenyue.mistplugin.commands.back.Back;
 import com.chenyue.mistplugin.commands.balance.Balance;
 import com.chenyue.mistplugin.commands.balanceTop.BalanceTop;
+import com.chenyue.mistplugin.commands.ban.Ban;
 import com.chenyue.mistplugin.commands.delhome.DelHome;
 import com.chenyue.mistplugin.commands.delspawn.DelSpawn;
 import com.chenyue.mistplugin.commands.delwarp.DelWarp;
 import com.chenyue.mistplugin.commands.eco.Eco;
+import com.chenyue.mistplugin.commands.hat.Hat;
 import com.chenyue.mistplugin.commands.home.Home;
 import com.chenyue.mistplugin.commands.homevip.HomeVIP;
 import com.chenyue.mistplugin.commands.mist.Mist;
@@ -15,6 +18,8 @@ import com.chenyue.mistplugin.commands.sethome.SetHome;
 import com.chenyue.mistplugin.commands.setspawn.SetSpawn;
 import com.chenyue.mistplugin.commands.setwarp.SetWarp;
 import com.chenyue.mistplugin.commands.spawn.Spawn;
+import com.chenyue.mistplugin.commands.suicide.Suicide;
+import com.chenyue.mistplugin.commands.tempban.TempBan;
 import com.chenyue.mistplugin.commands.tpa.Tpa;
 import com.chenyue.mistplugin.commands.tpaaccept.TpaAccept;
 import com.chenyue.mistplugin.commands.tpacancel.TpaCancel;
@@ -53,11 +58,11 @@ public final class MistPlugin extends JavaPlugin {
     private static HomeManager homeManager;
     private static TpManager tpManager;
     private static LocationManager locationManager;
+    private static BanManager banManager;
     private static WarpManager warpManager;
 
     @Override
     public void onEnable() {
-
         // Config
         this.saveDefaultConfig();
         this.initSpawnConfig();
@@ -67,6 +72,7 @@ public final class MistPlugin extends JavaPlugin {
         homeManager = new HomeManager();
         tpManager = new TpManager();
         locationManager = new LocationManager();
+        banManager = new BanManager();
         warpManager = new WarpManager();
         suffixes = ConfigHandler.getSuffixes();
         vaultImpl = new VaultImpl();
@@ -76,6 +82,10 @@ public final class MistPlugin extends JavaPlugin {
             return;
         }
         this.getLogger().info("Vault found, Eco has been registered");
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new BalTop(this).register();
+            this.getLogger().info("Placeholder has been registered");
+        }
         if (ConfigHandler.getLocale() == null) {
             disable(ConfigHandler.getLocale().getDisplayName() + " is an invalid locale! Change it in your config.yml");
             return;
@@ -85,7 +95,7 @@ public final class MistPlugin extends JavaPlugin {
         // Settings
         balanceTopRunnable = new BalanceTopRunnable();
         balanceTopRunnable.start(ConfigHandler.getBalanceTopInterval());
-        Config.load();
+        ConfigHandler.reloadConfig();
 
         // Init Cmd
         this.getCommand("eco").setExecutor(new Eco());
@@ -110,6 +120,10 @@ public final class MistPlugin extends JavaPlugin {
         this.getCommand("warp").setExecutor(new Warp(warpManager, new WarpGUI(warpManager)));
         this.getCommand("setwarp").setExecutor(new SetWarp(warpManager));
         this.getCommand("delwarp").setExecutor(new DelWarp(warpManager));
+        this.getCommand("ban").setExecutor(new Ban(banManager));
+        this.getCommand("tempban").setExecutor(new TempBan(banManager));
+        this.getCommand("hat").setExecutor(new Hat());
+        this.getCommand("suicide").setExecutor(new Suicide());
 
         // Listener
         this.getServer().getPluginManager().registerEvents(new ShiftFEvent(), this);
@@ -117,6 +131,7 @@ public final class MistPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new LocationEvent(locationManager), this);
         this.getServer().getPluginManager().registerEvents(new HomeGUI(homeManager), this);
         this.getServer().getPluginManager().registerEvents(new WarpGUI(warpManager), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerLogin(banManager), this);
 
         // Enabled
         this.getLogger().info("Plugin enabled");

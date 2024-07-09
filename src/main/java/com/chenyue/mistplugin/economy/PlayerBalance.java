@@ -1,5 +1,7 @@
 package com.chenyue.mistplugin.economy;
 
+import org.bukkit.Bukkit;
+
 import java.util.UUID;
 
 public class PlayerBalance {
@@ -22,5 +24,8 @@ public class PlayerBalance {
     }
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+    public String getPlayerName() {
+        return Bukkit.getOfflinePlayer(this.uuid).getName();
     }
 }

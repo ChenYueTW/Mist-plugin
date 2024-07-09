@@ -2,6 +2,7 @@ package com.chenyue.mistplugin.commands.spawn;
 
 import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

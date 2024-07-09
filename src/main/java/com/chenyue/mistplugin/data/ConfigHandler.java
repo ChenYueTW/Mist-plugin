@@ -20,6 +20,14 @@ public class ConfigHandler {
         return suffixes;
     }
 
+    public static String getWelcomeMessage() {
+        return getConfig().getString("Welcome_MSG");
+    }
+
+    public static String getShiftFCommand() {
+        return getConfig().getString("ShiftF_CMD");
+    }
+
     public static double getStringBalance() {
         return getConfig().getDouble("stringBalance");
     }
@@ -74,5 +82,10 @@ public class ConfigHandler {
 
     public static String getPassword() {
         return getConfig().getString("mysql.password");
+    }
+
+    public static void reloadConfig() {
+        MistPlugin.getInstance().saveDefaultConfig();
+        MistPlugin.getInstance().reloadConfig();
     }
 }

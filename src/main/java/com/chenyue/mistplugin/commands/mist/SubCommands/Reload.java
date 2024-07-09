@@ -1,6 +1,6 @@
 package com.chenyue.mistplugin.commands.mist.SubCommands;
 
-import com.chenyue.mistplugin.Config;
+import com.chenyue.mistplugin.data.ConfigHandler;
 import com.chenyue.mistplugin.utils.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class Reload extends SubCommand {
 
     @Override
     public void perform(@NotNull CommandSender sender, @NotNull String[] args) {
-        Config.load();
+        ConfigHandler.reloadConfig();
         sender.sendMessage("Reloaded Plugin!");
     }
 

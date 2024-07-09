@@ -3,6 +3,7 @@ package com.chenyue.mistplugin.commands.sethome;
 import com.chenyue.mistplugin.data.ConfigHandler;
 import com.chenyue.mistplugin.data.HomeManager;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -46,7 +47,12 @@ public class SetHome implements TabExecutor {
                     return true;
                 } else {
                     this.homeManager.saveHome(player, location, homeName);
-                    StringUtils.sendConfigMessage(sender, "messages.sethome.successful");
+                    StringUtils.sendConfigMessage(sender, "messages.sethome.successful", ImmutableMap.of(
+                            "%home%", homeName,
+                            "%X%", String.valueOf(location.getX()),
+                            "%Y%", String.valueOf(location.getY()),
+                            "%Z%", String.valueOf(location.getZ())
+                    ));
                     return true;
                 }
             } catch (IOException e) {

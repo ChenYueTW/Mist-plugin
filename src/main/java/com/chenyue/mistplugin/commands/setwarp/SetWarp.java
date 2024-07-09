@@ -2,6 +2,7 @@ package com.chenyue.mistplugin.commands.setwarp;
 
 import com.chenyue.mistplugin.data.WarpManager;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -36,7 +37,12 @@ public class SetWarp implements TabExecutor {
 
             try {
                 this.warpManager.saveWarp(warpName, location);
-                StringUtils.sendConfigMessage(sender, "messages.setwarp.successful");
+                StringUtils.sendConfigMessage(sender, "messages.setwarp.successful", ImmutableMap.of(
+                        "%name%", warpName,
+                        "%X%", String.valueOf(location.getX()),
+                        "%Y%", String.valueOf(location.getY()),
+                        "%Z%", String.valueOf(location.getZ())
+                ));
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();

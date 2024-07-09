@@ -1,5 +1,5 @@
 # 玩家進入時訊息
-Welcome_MSG: "歡迎進入 工程測試區!"
+Welcome_MSG: " 進入了 工程測試區!"
 # Shift + F後執行的指令
 ShiftF_CMD: "help"
 # SetHome上限
@@ -39,7 +39,7 @@ suffixes:
 
 # 訊息Lang
 messages:
-  prefix: "&b[&r&6Mist plugin&r&b]"
+  prefix: "&b[&r&c系統&r&b]"
   noPermission:
     - "%prefix% &c你沒有權限那樣做"
   playersOnly:
@@ -49,40 +49,37 @@ messages:
 
   balance:
     usage:
-      - "%prefix% &cUsage: /balance"
-      - "%prefix% &cUsage: /balance {player}"
+      - "%prefix% &e/balance"
+      - "%prefix% &e/balance {player}"
     noAccount:
       - "%prefix% &c找不到玩家"
     balance:
-      - "%prefix% &a目前金錢餘額 &e%balance%"
+      - "%prefix% &6目前金錢餘額 &a%balance%"
     otherNoAccount:
-      - "%prefix% &c找不到 &5%player%"
+      - "%prefix% &c找不到 &e%player%"
     otherBalance:
-      - "%prefix% &5%player% &a的金錢餘額 &e%balance%"
+      - "%prefix% &e%player% &6的金錢餘額 &a%balance%"
 
   money:
-    invalidSubCommand:
-      - "%prefix% &cThat sub-command doesn't exist!"
-
     give:
       usage:
-        - "%prefix% &cUsage: /money give {player} {amount}"
+        - "%prefix% &e/money give {player} {amount}"
       otherDoesntExist:
-        - "%prefix% &5%player% &cdoesn't exist!"
+        - "%prefix% &e%player% &c不存在"
       otherNoAccount:
         - "%prefix% &c找不到玩家"
       invalidAmount:
         - "%prefix% &c新增失敗"
       sent:
-        - "%prefix% &a已新增 &e%amount% &a給 &5%player%"
+        - "%prefix% &6已新增 &a%amount% &6給 &e%player%"
       sentMultiple:
-        - "%prefix% &a已新增 &e%amount% &a給 &b%player%"
+        - "%prefix% &6已新增 &a%amount% &6給 &e%player%"
       received:
-        - "%prefix% &a你得到了 &e%amount%&a"
+        - "%prefix% &6你得到了 &a%amount%&a"
 
     help:
       usage:
-        - "%prefix% &cUsage: /money help"
+        - "%prefix% &e/money help"
       message:
         - "%prefix% &eCommands:"
         - "%prefix% &b/money help"
@@ -93,49 +90,47 @@ messages:
 
     reload:
       usage:
-        - "%prefix% &cUsage: /money reload"
+        - "%prefix% &e/money reload"
       reloaded:
-        - "%prefix% &aYou reloaded the economy."
+        - "%prefix% &b重新載入完成"
 
     set:
       usage:
-        - "%prefix% &cUsage: /money set {player} {amount}"
+        - "%prefix% &e/money set {player} {amount}"
       otherDoesntExist:
-        - "%prefix% &5%player% &cdoesn't exist!"
+        - "%prefix% &e%player% &c不存在"
       otherNoAccount:
         - "%prefix% &c找不到玩家"
       invalidAmount:
         - "%prefix% &c設定失敗"
       setter:
-        - "%prefix% &a已設定 &5%player% &a的金錢為 &e%balance%"
+        - "%prefix% &6已設定 &a%player% &6的金錢為 &e%balance%"
       setterMultiple:
-        - "%prefix% &b%total% players' balances were set to &e%balance%&a."
+        - "%prefix% &6已設定 &a%total% &6位玩家的金錢為 &e%balance%"
       set:
-        - "%prefix% &aYour balance was set to &e%amount%&a."
+        - "%prefix% &6你的金錢已被設定為 &a%amount%"
 
     take:
       usage:
-        - "%prefix% &cUsage: /money take {player} {amount}"
+        - "%prefix% &c/money take {player} {amount}"
       otherDoesntExist:
-        - "%prefix% &5%player% &cdoesn't exist!"
+        - "%prefix% &e%player% &c不存在"
       otherNoAccount:
         - "%prefix% &c找不到玩家"
       invalidAmount:
         - "%prefix% &c扣除失敗"
-      insufficientFunds:
-        - "%prefix% &5%player% &chas insufficient funds!"
       take:
-        - "%prefix% &a從 &5%player% &a扣除 &e%amount%"
+        - "%prefix% &6已從 &e%player% &6扣除 &a%amount%"
       takeMultiple:
-        - "%prefix% &e%amount% &awas taken from &b%total% &aplayers' accounts."
+        - "%prefix% &6已設定 &a%total% &6位玩家的金錢為 &e%balance%"
       taken:
-        - "%prefix% &a你被扣除了 &e%amount%"
+        - "%prefix% &6你被扣除了 &a%amount%"
 
     pay:
       usage:
-        - "%prefix% &cUsage: /pay {player} {amount}"
+        - "%prefix% &c/pay {player} {amount}"
       otherDoesntExist:
-        - "%prefix% &5%player% &cdoesn't exist!"
+        - "%prefix% &e%player% &c不存在"
       noAccount:
         - "%prefix% &c你沒有帳戶資料"
       otherNoAccount:
@@ -144,57 +139,57 @@ messages:
         - "%prefix% &c你不能支付自己金錢"
       invalidAmount:
         - "%prefix% &c支付失敗"
-      insufficientFunds:
-        - "%prefix% &cYou have insufficient funds!"
       paid:
-        - "%prefix% &a已支付 &e%amount% &a給 &5%player%"
+        - "%prefix% &6已支付 &a%amount% &6給 &e%player%"
       received:
-        - "%prefix% &a已收到 &5%player% 支付的 &e%amount%"
+        - "%prefix% &6已收到 &e%player% 支付的 &a%amount%"
 
     top:
       usage:
-        - "%prefix% &cUsage: /balancetop"
-        - "%prefix% &cUsage: /balancetop {number}"
+        - "%prefix% &c/balancetop"
+        - "%prefix% &c/balancetop {number}"
       noAccounts:
         - "%prefix% &c沒有玩家"
       invalidTop:
         - "%prefix% &c無效指令"
       notEnoughPlayers:
         - "%prefix% &c沒有足夠的玩家"
+      messageHeader:
+        - "&6-----&b&lMist Cabin &r&e金錢榜&6-----"
       message:
-        - "%prefix% &b%rank%. &a%player%: &b%balance%"
+        - "&b%rank%. &e%player%: &a%balance%"
       self:
-        - "%prefix% &b%rank%. &a%player%: &b%balance% (YOU)"
+        - "%prefix% &b%rank%. &e%player%: &e%balance% (YOU)"
 
   setspawn:
     usage:
-      - "%prefix% &6/setspawn 創建伺服器Spawn"
+      - "%prefix% &e/setspawn"
     successful:
-      - "%prefix% &6Spawn設置成功!"
+      - "%prefix% &e設置成功 &6Spawn座標為: &b%X%&6, &b%Y%&6, &b%Z%"
     fail:
       - "%prefix% &cSpawn設置失敗"
 
   delspawn:
     usage:
-      - "%prefix% &6/delspawn 刪除伺服器Spawn"
+      - "%prefix% &e/delspawn"
     successful:
-      - "%prefix% &6Spawn刪除成功!"
+      - "%prefix% &eSpawn刪除成功"
     fail:
       - "%prefix% &cSpawn刪除失敗"
 
   spawn:
     usage:
-      - "%prefix% &6/spawn"
+      - "%prefix% &e/spawn"
     successful:
-      - "%prefix% &6傳送成功"
+      - "%prefix% &e已傳送至Spawn"
     teleport:
-      - "%prefix% &6你被傳送至Spawn"
+      - "%prefix% &e你被傳送至Spawn"
     noLocation:
       - "%prefix% &c沒有設置Spawn"
 
   home:
     successful:
-      - "%prefix% &6傳送成功"
+      - "%prefix% &6已傳送至家 &e%home%"
     failed:
       - "%prefix% &c傳送失敗"
     notFound:
@@ -202,19 +197,19 @@ messages:
 
   sethome:
     usage:
-      - "%prefix% &6/sethome <Home name>"
+      - "%prefix% &e/sethome {name}"
     limitExceeded:
       - "%prefix% &c家數量已達上限"
     successful:
-      - "%prefix% &6設定成功"
+      - "%prefix% &e%home% &6家已設定成功 座標: &b%X%&6, &b%Y%&6, &b%Z%"
     failed:
       - "%prefix% &c設定失敗"
 
   delhome:
     usage:
-      - "%prefix% &6/delhome <Home name>"
+      - "%prefix% &e/delhome {name}"
     successful:
-      - "%prefix% &6刪除成功"
+      - "%prefix% &6已刪除家 &e%home%"
     failed:
       - "%prefix% &c刪除失敗"
     notFound:
@@ -222,25 +217,29 @@ messages:
 
   tp:
     tpaUsage:
-      - "%prefix% &6/tpa <player>"
+      - "%prefix% &e/tpa {player}"
     tpaHereUsage:
-      - "%prefix% &6/tpahere <player>"
+      - "%prefix% &e/tpahere {player}"
     tpaAcceptUsage:
-      - "%prefix% &6/tpaaccept"
+      - "%prefix% &e/tpaaccept"
     tpaCancelUsage:
-      - "%prefix% &6/tpacancel"
+      - "%prefix% &e/tpacancel"
+    tpaHereAcceptUsage:
+      - "%prefix% &e/tpahereaccept"
+    tpaHereCancelUsage:
+      - "%prefix% &e/tpaherecancel"
     tpaSendRequest:
-      - "%prefix% &6已發送傳送請求"
+      - "%prefix% &6已對 &e%player% &6發送傳送請求"
     tpaReceiveRequest:
-      - "%prefix% &6%name% 發送傳送請求 到你身邊"
+      - "%prefix% &e%player% 發送傳送請求 &e到你身邊"
     tpaHereSendRequest:
-      - "%prefix% &6已發送傳送請求"
+      - "%prefix% &6已對 &e%player% &6發送傳送請求"
     tpaHereReceiveRequest:
-      - "%prefix% &6%name% 發送傳送請求 到他身邊"
+      - "%prefix% &e%player% &6發送傳送請求 &e到他身邊"
     acceptRequest:
-      - "%prefix% &6你接受了傳送請求"
+      - "%prefix% &6你&a接受&6了傳送請求"
     cancelRequest:
-      - "%prefix% &6你拒絕了傳送請求"
+      - "%prefix% &6你&a拒絕&6了傳送請求"
     successfulTeleport:
       - "%prefix% &6傳送成功"
     requestNotFound:
@@ -250,7 +249,7 @@ messages:
 
   back:
     usage:
-      - "%prefix% &6/back"
+      - "%prefix% &e/back"
     successful:
       - "%prefix% &6傳送成功"
     failed:
@@ -260,36 +259,69 @@ messages:
 
   homeVIP:
     usage:
-      - "%prefix% &6/homevip <homename> <blockID>"
+      - "%prefix% &e/homevip {家名稱} {方塊ID}"
     invalid:
       - "%prefix% &c無效方塊ID"
     successful:
-      - "%prefix% &6成功設置家 %homename% 的方塊ID為 %blockID%"
+      - "%prefix% &6成功設置家 &9%homename% &6的方塊ID為 &e%blockID%"
     failed:
-      - "%prefix% &e設置失敗"
+      - "%prefix% &c設置失敗"
 
   setwarp:
     usage:
-      - "%prefix% &6/setwarp <warpname>"
+      - "%prefix% &e/setwarp {name}"
     successful:
-      - "%prefix% &6Warp設置成功"
+      - "%prefix% &6設置成功 &e%name% &6座標為 &b%X%&6, &b%Y%&6, &b%Z%"
     failed:
-      - "%prefix% &cWarp設置失敗"
+      - "%prefix% &c設置失敗"
 
   delwarp:
     usage:
-      - "%prefix% &6/delwarp <warpname>"
+      - "%prefix% &e/delwarp {name}"
     successful:
-      - "%prefix% &6Warp刪除成功"
+      - "%prefix% &6已刪除Warp &e%name%"
     failed:
-      - "%prefix% &6Warp刪除失敗"
+      - "%prefix% &c刪除失敗"
     notFound:
-      - "%prefix% &6沒有此Warp"
+      - "%prefix% &c未找到Warp"
 
   warp:
     usage:
-      - "%prefix% &6/warp <warpname>"
+      - "%prefix% &e/warp {name}"
     successful:
-      - "%prefix% &6傳送成功"
+      - "%prefix% &6已傳送至Warp %e%name%"
     failed:
-      - "%prefix% &6傳送失敗"
+      - "%prefix% &c傳送失敗"
+    notFound:
+      - "%prefix% &c未找到Warp"
+
+  ban:
+    usage:
+      - "%prefix% &e/ban {player_name} {reason}"
+    playerNotFound:
+      - "%prefix% &c沒有找到玩家"
+    success:
+      - "%prefix% &6玩家 &e%player% &6已經被BAN了\n原因: %reason%"
+  tempban:
+    usage:
+      - "%prefix% &e/tempban {time} {player_name} {reason}"
+    invalied:
+      - "%prefix% &c指令失敗"
+    playerNotFound:
+      - "%prefix% &c沒有找到玩家"
+    success:
+      "%prefix% &c玩家 &e%player% &6已經被TEMPBAN了\n原因: %reason%"
+  unban:
+    usage:
+      - "%prefix% &e/unban {player}"
+    playerNotfound:
+      - "%prefix% &c沒有找到玩家"
+    success:
+      - "%prefix% &e%player% 已經被UNBAN了"
+  hat:
+    usage:
+      - "%prefix% &e/hat"
+    airHand:
+      - "%prefix% &c手上要有物品!"
+    success:
+      - "%prefix% &6已將 %material% 戴在頭上!"

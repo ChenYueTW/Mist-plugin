@@ -50,7 +50,11 @@ public class SetSpawn implements TabExecutor {
 
                 try {
                     MistPlugin.getSpawnConfig().save(new File(plugin.getDataFolder(), "spawn.yml"));
-                    StringUtils.sendConfigMessage(sender, "messages.setspawn.successful");
+                    StringUtils.sendConfigMessage(player, "messages.setspawn.successful", ImmutableMap.of(
+                            "%X%", String.valueOf(location.getX()),
+                            "%Y%", String.valueOf(location.getY()),
+                            "%Z%", String.valueOf(location.getZ())
+                    ));
                 } catch (IOException e) {
                     e.printStackTrace();
                     StringUtils.sendConfigMessage(sender, "messages.setspawn.fail");
