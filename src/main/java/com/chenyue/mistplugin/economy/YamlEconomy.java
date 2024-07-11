@@ -15,12 +15,12 @@ import java.util.UUID;
 
 public class YamlEconomy implements Economy {
     public YamlEconomy() {
-        Path dataDir = Paths.get(MistPlugin.getPath() + "/data/");
+        Path dataDir = Paths.get(MistPlugin.getInstance().getPath() + "/data/");
         if (!Files.exists(dataDir)) {
             try {
                 Files.createDirectories(dataDir);
             } catch (IOException e) {
-                MistPlugin.warn("There was an error creating the data directory.");
+                MistPlugin.getInstance().warn("There was an error creating the data directory.");
                 return;
             }
         }
@@ -30,7 +30,7 @@ public class YamlEconomy implements Economy {
     public boolean set(UUID uuid, double amount) {
         if (amount < 0) return false;
 
-        YamlData data = new YamlData(uuid.toString() + ".yml", MistPlugin.getPath() + "/data");
+        YamlData data = new YamlData(uuid.toString() + ".yml", MistPlugin.getInstance().getPath() + "/data");
         data.getConfig().set("UUID", uuid.toString());
         data.getConfig().set("Balance", amount);
         data.saveConfig();
@@ -40,7 +40,7 @@ public class YamlEconomy implements Economy {
     @Override
     public PlayerBalance getBalance(UUID uuid) {
         try {
-            YamlData data = new YamlData(uuid.toString() + ".yml", MistPlugin.getPath() + "/data");
+            YamlData data = new YamlData(uuid.toString() + ".yml", MistPlugin.getInstance().getPath() + "/data");
             double balance = data.getConfig().getDouble("Balance");
             return new PlayerBalance(uuid, balance);
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class YamlEconomy implements Economy {
 
     @Override
     public boolean delete(UUID uuid) {
-        File isLandFile = new File(MistPlugin.getPath() + "/data/" + uuid.toString() + ".yml");
+        File isLandFile = new File(MistPlugin.getInstance().getPath() + "/data/" + uuid.toString() + ".yml");
         isLandFile.delete();
         return true;
     }
@@ -87,7 +87,7 @@ public class YamlEconomy implements Economy {
     @Override
     public List<PlayerBalance> getPlayers() {
         List<PlayerBalance> playerData = new ArrayList<PlayerBalance>();
-        File[] files = new File(MistPlugin.getPath() + "/data").listFiles();
+        File[] files = new File(MistPlugin.getInstance().getPath() + "/data").listFiles();
         for (File file : files) {
             playerData.add(this.getBalance(UUID.fromString(file.getName().replace(".yml", ""))));
         }

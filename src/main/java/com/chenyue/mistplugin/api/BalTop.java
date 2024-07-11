@@ -42,7 +42,7 @@ public class BalTop extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
-        BalanceTopRunnable balanceTopRunnable = MistPlugin.getBalanceTopRunnable();
+        BalanceTopRunnable balanceTopRunnable = MistPlugin.getInstance().getBalanceTopRunnable();
         if (identifier.startsWith("baltop_player_")) {
             try {
                 int rank = Integer.parseInt(identifier.substring("baltop_player_".length()));

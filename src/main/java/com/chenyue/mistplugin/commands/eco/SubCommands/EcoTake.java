@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EcoTake extends SubCommand {
     @Override
@@ -31,70 +32,68 @@ public class EcoTake extends SubCommand {
     public void perform(@NotNull CommandSender sender, @NotNull String[] args) {
         if (!(args.length == 3)) {
             StringUtils.sendConfigMessage(sender, "messages.money.take.usage");
-        } else {
-            List<OfflinePlayer> others = MistPlugin.getPlayerByString(sender, args[1]);
-            double amount = 0;
-            int total = 0;
-            boolean failed = false;
-
-            if (others.isEmpty() && !args[1].equals("@a")) {
-                StringUtils.sendConfigMessage(sender, "messages.money.take.otherDoesntExist", ImmutableMap.of(
-                        "%player%", args[1]
-                ));
-                return;
-            }
-            try {
-                amount = MistPlugin.getAmountFromString(args[2]);
-            }
-            catch (NumberFormatException e){
-                StringUtils.sendConfigMessage(sender, "messages.money.take.invalidAmount", ImmutableMap.of(
-                        "%amount%", args[2]
-                ));
-                return;
-            }
-            if (amount < 0) {
-                StringUtils.sendConfigMessage(sender, "messages.money.take.invalidAmount", ImmutableMap.of(
-                        "%amount%", args[2]
-                ));
-                return;
-            }
-            for (OfflinePlayer other : others) {
-                if (!MistPlugin.getEco().hasAccount(other.getUniqueId())) {
-                    StringUtils.sendConfigMessage(sender, "messages.money.take.otherNoAccount", ImmutableMap.of());
-                    failed = true;
-                    continue;
-                }
-                if (!MistPlugin.getEco().has(other.getUniqueId(), amount)) {
-                    StringUtils.sendConfigMessage(sender, "messages.money.take.insufficientFunds", ImmutableMap.of(
-                            "%player%", other.getName()
-                    ));
-                    failed = true;
-                    continue;
-                }
-                MistPlugin.getEco().withdraw(other.getUniqueId(), amount);
-                if (other instanceof Player) {
-                    if (!(sender instanceof Player && ((Player) sender).equals((Player) other))) {
-                        StringUtils.sendConfigMessage((Player) other, "messages.money.take.taken", ImmutableMap.of(
-                                "%amount%", MistPlugin.format(amount)
-                        ));
-                    }
-                }
-                total += 1;
-            }
-            if (others.size() == 1) {
-                if (!failed) {
-                    StringUtils.sendConfigMessage(sender, "messages.money.take.take", ImmutableMap.of(
-                            "%amount%", MistPlugin.format(amount),
-                            "%player%", others.get(0).getName()
-                    ));
-                }
-            } else {
-                StringUtils.sendConfigMessage(sender, "messages.money.take.takeMultiple", ImmutableMap.of(
-                        "%total%", total + "",
-                        "%amount%", MistPlugin.format(amount)
-                ));
-            }
             return;
+        }
+        List<OfflinePlayer> others = MistPlugin.getInstance().getPlayerByString(sender, args[1]);
+        double amount;
+        int total = 0;
+        boolean failed = false;
+
+        if (others.isEmpty() && !args[1].equals("@a")) {
+            StringUtils.sendConfigMessage(sender, "messages.money.take.otherDoesntExist", ImmutableMap.of(
+                    "%player%", args[1]
+            ));
+            return;
+        }
+        try {
+            amount = MistPlugin.getInstance().getAmountFromString(args[2]);
+        } catch (NumberFormatException e) {
+            StringUtils.sendConfigMessage(sender, "messages.money.take.invalidAmount", ImmutableMap.of(
+                    "%amount%", args[2]
+            ));
+            return;
+        }
+        if (amount < 0) {
+            StringUtils.sendConfigMessage(sender, "messages.money.take.invalidAmount", ImmutableMap.of(
+                    "%amount%", args[2]
+            ));
+            return;
+        }
+        for (OfflinePlayer other : others) {
+            if (!MistPlugin.getInstance().getEco().hasAccount(other.getUniqueId())) {
+                StringUtils.sendConfigMessage(sender, "messages.money.take.otherNoAccount", ImmutableMap.of());
+                failed = true;
+                continue;
+            }
+            if (!MistPlugin.getInstance().getEco().has(other.getUniqueId(), amount)) {
+                StringUtils.sendConfigMessage(sender, "messages.money.take.insufficientFunds", ImmutableMap.of(
+                        "%player%", Objects.requireNonNull(other.getName())
+                ));
+                failed = true;
+                continue;
+            }
+            MistPlugin.getInstance().getEco().withdraw(other.getUniqueId(), amount);
+            if (other instanceof Player) {
+                if (!(sender instanceof Player && sender.equals(other))) {
+                    StringUtils.sendConfigMessage((Player) other, "messages.money.take.taken", ImmutableMap.of(
+                            "%amount%", MistPlugin.getInstance().format(amount)
+                    ));
+                }
+            }
+            total += 1;
+        }
+        if (others.size() == 1) {
+            if (!failed) {
+                StringUtils.sendConfigMessage(sender, "messages.money.take.take", ImmutableMap.of(
+                        "%amount%", MistPlugin.getInstance().format(amount),
+                        "%player%", Objects.requireNonNull(others.getFirst().getName())
+                ));
+            }
+        } else {
+            StringUtils.sendConfigMessage(sender, "messages.money.take.takeMultiple", ImmutableMap.of(
+                    "%total%", total + "",
+                    "%amount%", MistPlugin.getInstance().format(amount)
+            ));
         }
     }
 

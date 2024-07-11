@@ -1,6 +1,6 @@
 package com.chenyue.mistplugin.events;
 
-import com.chenyue.mistplugin.data.LocationManager;
+import com.chenyue.mistplugin.managers.LocationManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EcoGive extends SubCommand implements ColorUtils {
 
@@ -33,64 +34,62 @@ public class EcoGive extends SubCommand implements ColorUtils {
     public void perform(@NotNull CommandSender sender, @NotNull String[] args) {
         if (!(args.length == 3)) {
             StringUtils.sendConfigMessage(sender, "messages.money.give.usage");
-        } else {
-            List<OfflinePlayer> others = MistPlugin.getPlayerByString(sender, args[1]);
-            double amount = 0;
-            int total = 0;
-            boolean failed = false;
+            return;
+        }
+        List<OfflinePlayer> others = MistPlugin.getInstance().getPlayerByString(sender, args[1]);
+        double amount;
+        boolean failed = false;
 
-            if (others.isEmpty() && !args[1].equals("@a")) {
-                StringUtils.sendConfigMessage(sender, "messages.money.give.otherDoesntExist", ImmutableMap.of(
-                        "%player%", args[1]
-                ));
+        if (others.isEmpty() && !args[1].equals("@a")) {
+            StringUtils.sendConfigMessage(sender, "messages.money.give.otherDoesntExist", ImmutableMap.of(
+                    "%player%", args[1]
+            ));
+            return;
+        }
+        try {
+            amount = MistPlugin.getInstance().getAmountFromString(args[2]);
+        } catch (NumberFormatException e) {
+            StringUtils.sendConfigMessage(sender, "messages.money.give.invalidAmount", ImmutableMap.of(
+                    "%amount%", args[2]
+            ));
+            return;
+        }
+        if (amount < 0) {
+            StringUtils.sendConfigMessage(sender, "messages.money.give.invalidAmount", ImmutableMap.of(
+                    "%amount%", args[2]
+            ));
+            return;
+        }
+        for (OfflinePlayer other : others) {
+            if (!MistPlugin.getInstance().getEco().hasAccount(other.getUniqueId())) {
+                StringUtils.sendConfigMessage(sender, "messages.money.give.otherNoAccount", ImmutableMap.of());
                 return;
             }
-            try {
-                amount = MistPlugin.getAmountFromString(args[2]);
-            } catch (NumberFormatException e) {
-                StringUtils.sendConfigMessage(sender, "messages.money.give.invalidAmount", ImmutableMap.of(
-                        "%amount%", args[2]
-                ));
-                return;
-            }
-            if (amount < 0) {
-                StringUtils.sendConfigMessage(sender, "messages.money.give.invalidAmount", ImmutableMap.of(
-                        "%amount%", args[2]
-                ));
-                return;
-            }
-            for (OfflinePlayer other : others) {
-                if (!MistPlugin.getEco().hasAccount(other.getUniqueId())) {
-                    StringUtils.sendConfigMessage(sender, "messages.money.give.otherNoAccount", ImmutableMap.of());
-                    failed = true;
-                    return;
-                }
-                MistPlugin.getEco().deposit(other.getUniqueId(), amount);
+            MistPlugin.getInstance().getEco().deposit(other.getUniqueId(), amount);
 
-                if (other instanceof Player) {
-                    if (!(sender instanceof Player && ((Player) sender).equals((Player) other))) {
-                        StringUtils.sendConfigMessage((Player) other, "messages.money.give.received", ImmutableMap.of(
-                                "%amount%", MistPlugin.format(amount)
-                        ));
-                    }
-                }
-                total += 1;
-            }
-            if (others.size() != 1) {
-                if (!failed) {
-                    OfflinePlayer other = others.get(0);
-                    StringUtils.sendConfigMessage(sender, "messages.money.give.sent", ImmutableMap.of(
-                            "%amount%", MistPlugin.format(amount),
-                            "%player%", other.getName()
+            if (other instanceof Player) {
+                if (!(sender instanceof Player && sender.equals(other))) {
+                    StringUtils.sendConfigMessage((Player) other, "messages.money.give.received", ImmutableMap.of(
+                            "%amount%", MistPlugin.getInstance().format(amount)
                     ));
                 }
-            } else {
-                StringUtils.sendConfigMessage(sender, "messages.money.give.sentMultiple", ImmutableMap.of(
-                        "%player%", others.get(0).getName(),
-                        "%amount%", MistPlugin.format(amount)
-                ));
             }
         }
+        if (others.size() != 1) {
+            if (!failed) {
+                OfflinePlayer other = others.getFirst();
+                StringUtils.sendConfigMessage(sender, "messages.money.give.sent", ImmutableMap.of(
+                        "%amount%", MistPlugin.getInstance().format(amount),
+                        "%player%", Objects.requireNonNull(other.getName())
+                ));
+            }
+        } else {
+            StringUtils.sendConfigMessage(sender, "messages.money.give.sentMultiple", ImmutableMap.of(
+                    "%player%", Objects.requireNonNull(others.getFirst().getName()),
+                    "%amount%", MistPlugin.getInstance().format(amount)
+            ));
+        }
+
     }
 
     @Override

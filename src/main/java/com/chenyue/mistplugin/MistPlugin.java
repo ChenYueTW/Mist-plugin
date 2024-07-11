@@ -25,13 +25,16 @@ import com.chenyue.mistplugin.commands.tpaaccept.TpaAccept;
 import com.chenyue.mistplugin.commands.tpacancel.TpaCancel;
 import com.chenyue.mistplugin.commands.tpahereaccept.TpaHereAccept;
 import com.chenyue.mistplugin.commands.tpaherecancel.TpaHereCancel;
+import com.chenyue.mistplugin.commands.unban.UnBan;
 import com.chenyue.mistplugin.commands.warp.Warp;
+import com.chenyue.mistplugin.commands.workbench.Workbench;
 import com.chenyue.mistplugin.data.*;
 import com.chenyue.mistplugin.economy.Economy;
 import com.chenyue.mistplugin.economy.SQLEconomy;
 import com.chenyue.mistplugin.economy.VaultImpl;
 import com.chenyue.mistplugin.economy.YamlEconomy;
 import com.chenyue.mistplugin.events.*;
+import com.chenyue.mistplugin.managers.*;
 import com.chenyue.mistplugin.runnables.BalanceTopRunnable;
 import com.chenyue.mistplugin.commands.tpahere.TpaHere;
 import org.bukkit.Bukkit;
@@ -49,17 +52,30 @@ import java.util.*;
 
 public final class MistPlugin extends JavaPlugin {
     private static MistPlugin instance;
-    private static VaultImpl vaultImpl;
-    private static Economy economy;
-    private static BalanceTopRunnable balanceTopRunnable;
-    private static Map<String, Integer> suffixes = new HashMap<>();
-    private static final Map<String, String> sqlColumns = new HashMap<>();
-    private static FileConfiguration spawnConfig;
-    private static HomeManager homeManager;
-    private static TpManager tpManager;
-    private static LocationManager locationManager;
-    private static BanManager banManager;
-    private static WarpManager warpManager;
+    private final VaultImpl vaultImpl;
+    private final BalanceTopRunnable balanceTopRunnable;
+    private final Map<String, Integer> suffixes;
+    private final Map<String, String> sqlColumns;
+    private final HomeManager homeManager;
+    private final TpManager tpManager;
+    private final LocationManager locationManager;
+    private final BanManager banManager;
+    private final WarpManager warpManager;
+    private Economy economy;
+    private FileConfiguration spawnConfig;
+
+    public MistPlugin() {
+        instance = this;
+        this.homeManager = new HomeManager();
+        this.tpManager = new TpManager();
+        this.locationManager = new LocationManager();
+        this.banManager = new BanManager();
+        this.warpManager = new WarpManager();
+        this.balanceTopRunnable = new BalanceTopRunnable();
+        this.sqlColumns = new HashMap<>();
+        this.suffixes = ConfigHandler.getSuffixes();
+        this.vaultImpl = new VaultImpl();
+    }
 
     @Override
     public void onEnable() {
@@ -68,70 +84,56 @@ public final class MistPlugin extends JavaPlugin {
         this.initSpawnConfig();
         this.reloadConfig();
         this.addSqlColumns();
-        instance = this;
-        homeManager = new HomeManager();
-        tpManager = new TpManager();
-        locationManager = new LocationManager();
-        banManager = new BanManager();
-        warpManager = new WarpManager();
-        suffixes = ConfigHandler.getSuffixes();
-        vaultImpl = new VaultImpl();
 
-        if (!this.setupEco()) {
-            disable("Eco couldn't be register, Vault plugin is missing!");
-            return;
-        }
-        this.getLogger().info("Vault found, Eco has been registered");
-        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new BalTop(this).register();
-            this.getLogger().info("Placeholder has been registered");
-        }
+        // Plugin Setup
+        this.setupEco();
+
         if (ConfigHandler.getLocale() == null) {
-            disable(ConfigHandler.getLocale().getDisplayName() + " is an invalid locale! Change it in your config.yml");
+            this.disable(ConfigHandler.getLocale().getDisplayName() + " is an invalid locale! Change it in your config.yml");
             return;
         }
-        economy = ConfigHandler.isSQL() ? new SQLEconomy() : new YamlEconomy();
 
         // Settings
-        balanceTopRunnable = new BalanceTopRunnable();
-        balanceTopRunnable.start(ConfigHandler.getBalanceTopInterval());
+        this.balanceTopRunnable.start(ConfigHandler.getBalanceTopInterval());
         ConfigHandler.reloadConfig();
 
         // Init Cmd
-        this.getCommand("eco").setExecutor(new Eco());
-        this.getCommand("balance").setExecutor(new Balance());
-        this.getCommand("balancetop").setExecutor(new BalanceTop());
-        this.getCommand("pay").setExecutor(new Pay());
-        this.getCommand("mist").setExecutor(new Mist());
-        this.getCommand("spawn").setExecutor(new Spawn(this));
-        this.getCommand("setspawn").setExecutor(new SetSpawn(this));
-        this.getCommand("delspawn").setExecutor(new DelSpawn(this));
-        this.getCommand("home").setExecutor(new Home(homeManager, new HomeGUI(homeManager)));
-        this.getCommand("sethome").setExecutor(new SetHome(homeManager));
-        this.getCommand("delhome").setExecutor(new DelHome(homeManager));
-        this.getCommand("homevip").setExecutor(new HomeVIP(homeManager));
-        this.getCommand("tpa").setExecutor(new Tpa(tpManager));
-        this.getCommand("tpahere").setExecutor(new TpaHere(tpManager));
-        this.getCommand("tpaaccept").setExecutor(new TpaAccept(tpManager));
-        this.getCommand("tpacancel").setExecutor(new TpaCancel(tpManager));
-        this.getCommand("tpahereaccept").setExecutor(new TpaHereAccept(tpManager));
-        this.getCommand("tpaherecancel").setExecutor(new TpaHereCancel(tpManager));
-        this.getCommand("back").setExecutor(new Back(locationManager));
-        this.getCommand("warp").setExecutor(new Warp(warpManager, new WarpGUI(warpManager)));
-        this.getCommand("setwarp").setExecutor(new SetWarp(warpManager));
-        this.getCommand("delwarp").setExecutor(new DelWarp(warpManager));
-        this.getCommand("ban").setExecutor(new Ban(banManager));
-        this.getCommand("tempban").setExecutor(new TempBan(banManager));
-        this.getCommand("hat").setExecutor(new Hat());
-        this.getCommand("suicide").setExecutor(new Suicide());
+        Objects.requireNonNull(this.getCommand("eco")).setExecutor(new Eco());
+        Objects.requireNonNull(this.getCommand("balance")).setExecutor(new Balance());
+        Objects.requireNonNull(this.getCommand("balancetop")).setExecutor(new BalanceTop());
+        Objects.requireNonNull(this.getCommand("pay")).setExecutor(new Pay());
+        Objects.requireNonNull(this.getCommand("mist")).setExecutor(new Mist());
+        Objects.requireNonNull(this.getCommand("spawn")).setExecutor(new Spawn());
+        Objects.requireNonNull(this.getCommand("setspawn")).setExecutor(new SetSpawn());
+        Objects.requireNonNull(this.getCommand("delspawn")).setExecutor(new DelSpawn());
+        Objects.requireNonNull(this.getCommand("home")).setExecutor(new Home(this.homeManager, new HomeGUI(this.homeManager)));
+        Objects.requireNonNull(this.getCommand("sethome")).setExecutor(new SetHome(this.homeManager));
+        Objects.requireNonNull(this.getCommand("delhome")).setExecutor(new DelHome(this.homeManager));
+        Objects.requireNonNull(this.getCommand("homevip")).setExecutor(new HomeVIP(this.homeManager));
+        Objects.requireNonNull(this.getCommand("tpa")).setExecutor(new Tpa(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpahere")).setExecutor(new TpaHere(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpaaccept")).setExecutor(new TpaAccept(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpacancel")).setExecutor(new TpaCancel(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpahereaccept")).setExecutor(new TpaHereAccept(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpaherecancel")).setExecutor(new TpaHereCancel(this.tpManager));
+        Objects.requireNonNull(this.getCommand("back")).setExecutor(new Back(this.locationManager));
+        Objects.requireNonNull(this.getCommand("warp")).setExecutor(new Warp(this.warpManager, new WarpGUI(this.warpManager)));
+        Objects.requireNonNull(this.getCommand("setwarp")).setExecutor(new SetWarp(this.warpManager));
+        Objects.requireNonNull(this.getCommand("delwarp")).setExecutor(new DelWarp(this.warpManager));
+        Objects.requireNonNull(this.getCommand("ban")).setExecutor(new Ban(this.banManager));
+        Objects.requireNonNull(this.getCommand("tempban")).setExecutor(new TempBan(this.banManager));
+        Objects.requireNonNull(this.getCommand("unban")).setExecutor(new UnBan(this.banManager));
+        Objects.requireNonNull(this.getCommand("hat")).setExecutor(new Hat());
+        Objects.requireNonNull(this.getCommand("suicide")).setExecutor(new Suicide());
+        Objects.requireNonNull(this.getCommand("workbench")).setExecutor(new Workbench());
 
         // Listener
         this.getServer().getPluginManager().registerEvents(new ShiftFEvent(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerEvent(), this);
-        this.getServer().getPluginManager().registerEvents(new LocationEvent(locationManager), this);
-        this.getServer().getPluginManager().registerEvents(new HomeGUI(homeManager), this);
-        this.getServer().getPluginManager().registerEvents(new WarpGUI(warpManager), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerLogin(banManager), this);
+        this.getServer().getPluginManager().registerEvents(new LocationEvent(this.locationManager), this);
+        this.getServer().getPluginManager().registerEvents(new HomeGUI(this.homeManager), this);
+        this.getServer().getPluginManager().registerEvents(new WarpGUI(this.warpManager), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerLogin(this.banManager), this);
 
         // Enabled
         this.getLogger().info("Plugin enabled");
@@ -147,98 +149,94 @@ public final class MistPlugin extends JavaPlugin {
         this.getLogger().info("Plugin disabled");
     }
 
-    private void addSqlColumns() {
-        sqlColumns.put("Balance", "DECIMAL(65, 2) NOT NULL DEFAULT " + getConfig().getDouble("startingBalance"));
-    }
-
-    public static void warn(String message) {
+    public void warn(String message) {
         MistPlugin.getInstance().getLogger().warning(message);
     }
 
-    public static void disable(String message) {
-        warn(message);
-        Bukkit.getPluginManager().disablePlugin(MistPlugin.getInstance());
+    public void disable(String message) {
+        this.warn(message);
+        Bukkit.getPluginManager().disablePlugin(this);
+    }
+
+    public String getPath() {
+        return this.getDataFolder().getAbsolutePath();
     }
 
     public static MistPlugin getInstance() {
         return instance;
     }
 
+    // Spawn
     private void initSpawnConfig() {
         File spanwFile = new File(this.getDataFolder(), "spawn.yml");
         if (!spanwFile.exists()) {
             spanwFile.getParentFile().mkdirs();
             this.saveResource("spawn.yml", false);
         }
-        spawnConfig = YamlConfiguration.loadConfiguration(spanwFile);
+        this.spawnConfig = YamlConfiguration.loadConfiguration(spanwFile);
+    }
+    public FileConfiguration getSpawnConfig() {
+        return this.spawnConfig;
     }
 
-    public static FileConfiguration getSpawnConfig() {
-        return spawnConfig;
+    // Economy
+    public Economy getEco() {
+        return this.economy;
     }
-
-    public static ArrayList<OfflinePlayer> getPlayerByString(CommandSender sender, String name) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-        ArrayList<OfflinePlayer> players = new ArrayList<OfflinePlayer>();
-
-        if (player == null && !name.equals("@a")) return players;
-        if (name.equals("@a")) {
-            players.addAll(new ArrayList<OfflinePlayer>(Bukkit.getOnlinePlayers()));
-            if (sender instanceof OfflinePlayer) players.remove((OfflinePlayer) sender);
-            return players;
+    private void setupEco() {
+        if (this.getServer().getPluginManager().getPlugin("Vault") == null) {
+            this.getLogger().warning("Vault not found!");
+            return;
+        } else {
+            this.getLogger().warning("Vault found!");
         }
-        return new ArrayList<OfflinePlayer>(Arrays.asList(player));
-    }
-
-    public static double getAmountFromString(String string) {
-        int mult = 0;
-        for (Map.Entry<String, Integer> suffix : suffixes.entrySet()) {
-            if (string.endsWith(suffix.getKey())) {
-                string = string.substring(0, string.length() - 1);
-                mult = suffix.getValue();
-            }
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            this.getLogger().warning("PlaceholderAPI not found!");
+            return;
+        } else {
+            this.getLogger().warning("PlaceholderAPI found!");
         }
-        double pow = Math.pow(10, mult);
-        return Math.round(Double.valueOf(string) * (100.0 * pow)) / (100.0 * pow) * pow;
+        this.getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, this.vaultImpl, this, ServicePriority.Highest);
+        this.economy = ConfigHandler.isSQL() ? new SQLEconomy() : new YamlEconomy();
+        this.getLogger().info("Eco has been registered");
     }
-
-    public static Economy getEco() {
-        return economy;
-    }
-
-    public static String getPath() {
-        return MistPlugin.getInstance().getDataFolder().getAbsolutePath();
-    }
-
-    public static Map<String, String> getSqlColumns() {
-        return sqlColumns;
-    }
-
-    public static String format(double amount) {
+    public String format(double amount) {
         Locale locale = ConfigHandler.getLocale();
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(locale);
         String formatted = numberFormat.format(amount).replace("&nbsp", " ").replace("\u00A0", " ");
         if (ConfigHandler.isCustomSymbol())  formatted = formatted.replace(Currency.getInstance(locale).getSymbol(locale), ConfigHandler.getCustomSymbol());
         return formatted;
     }
+    public ArrayList<OfflinePlayer> getPlayerByString(CommandSender sender, String name) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
 
-    public static void setSuffixes(Map<String, Integer> suffixes) {
-        MistPlugin.suffixes = suffixes;
-    }
-
-    public static BalanceTopRunnable getBalanceTopRunnable() {
-        return balanceTopRunnable;
-    }
-
-    public static void setBalanceTopRunnable(BalanceTopRunnable balanceTopRunnable) {
-        MistPlugin.balanceTopRunnable = balanceTopRunnable;
-    }
-
-    private boolean setupEco() {
-        if (this.getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+        if (name.equals("@a")) {
+            ArrayList<OfflinePlayer> players = new ArrayList<OfflinePlayer>(new ArrayList<OfflinePlayer>(Bukkit.getOnlinePlayers()));
+            if (sender instanceof OfflinePlayer) players.remove((OfflinePlayer) sender);
+            return players;
         }
-        this.getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, vaultImpl, this, ServicePriority.Highest);
-        return true;
+        return new ArrayList<OfflinePlayer>(List.of(player));
+    }
+    public double getAmountFromString(String string) {
+        int mult = 0;
+        for (Map.Entry<String, Integer> suffix : this.suffixes.entrySet()) {
+            if (string.endsWith(suffix.getKey())) {
+                string = string.substring(0, string.length() - 1);
+                mult = suffix.getValue();
+            }
+        }
+        double pow = Math.pow(10, mult);
+        return Math.round(Double.parseDouble(string) * (100.0 * pow)) / (100.0 * pow) * pow;
+    }
+    public BalanceTopRunnable getBalanceTopRunnable() {
+        return this.balanceTopRunnable;
+    }
+
+    // SQL
+    private void addSqlColumns() {
+        this.sqlColumns.put("Balance", "DECIMAL(65, 2) NOT NULL DEFAULT " + getConfig().getDouble("startingBalance"));
+    }
+    public Map<String, String> getSqlColumns() {
+        return this.sqlColumns;
     }
 }

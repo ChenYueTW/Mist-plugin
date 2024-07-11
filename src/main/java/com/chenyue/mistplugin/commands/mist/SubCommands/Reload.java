@@ -15,12 +15,12 @@ public class Reload extends SubCommand {
 
     @Override
     public String getDescription() {
-        return "Reload Chenyue Plugin";
+        return "Reload Mist Plugin";
     }
 
     @Override
     public String getSyntax() {
-        return "/chenyueplugin <reload>";
+        return "/mist <reload>";
     }
 
     @Override

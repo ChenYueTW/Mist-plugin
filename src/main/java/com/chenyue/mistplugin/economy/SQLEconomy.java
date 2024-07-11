@@ -29,24 +29,24 @@ public class SQLEconomy implements Economy {
                 Statement statement = this.sql.getConnection().createStatement();
                 DatabaseMetaData md = this.sql.getConnection().getMetaData();
                 statement.execute("CREATE TABLE IF NOT EXISTS Economy (UUID VARCHAR(36) NOT NULL);");
-                for (Map.Entry<String, String> column : MistPlugin.getSqlColumns().entrySet()) {
+                for (Map.Entry<String, String> column : MistPlugin.getInstance().getSqlColumns().entrySet()) {
                     if (!md.getColumns(null, null, "Economy", column.getKey()).next()) {
                         statement.execute("ALTER TABLE Economy ADD " + column.getKey() + " " + column.getValue() + ";");
                     }
                 }
                 statement.close();
             } catch (SQLException e) {
-                MistPlugin.disable("There was an error with creating the database table.");
+                MistPlugin.getInstance().disable("There was an error with creating the database table.");
                 return;
             }
 
             try {
                 PreparedStatement statement = this.sql.getConnection().prepareStatement("ALTER TABLE Economy "
-                        + "MODIFY COLUMN Balance " + MistPlugin.getSqlColumns().get("Balance"));
+                        + "MODIFY COLUMN Balance " + MistPlugin.getInstance().getSqlColumns().get("Balance"));
                 statement.executeUpdate();
                 statement.close();
             } catch (SQLException e) {
-                MistPlugin.disable("There was an error updating the sql balance from 1dp to 2dp.");
+                MistPlugin.getInstance().disable("There was an error updating the sql balance from 1dp to 2dp.");
                 return;
             }
         }
@@ -55,13 +55,13 @@ public class SQLEconomy implements Economy {
     private void connectSQL() {
         try {
             this.sql.connect();
-            MistPlugin.warn("Successfully connected to MySQL!");
+            MistPlugin.getInstance().warn("Successfully connected to MySQL!");
         } catch (SQLException e) {
-            MistPlugin.warn("There was a problem connecting to MySQL! " + e.getMessage());
+            MistPlugin.getInstance().warn("There was a problem connecting to MySQL! " + e.getMessage());
             Bukkit.getPluginManager().disablePlugin(MistPlugin.getInstance());
             return;
         } catch (ClassNotFoundException e) {
-            MistPlugin.warn("MySQL driver class not found.");
+            MistPlugin.getInstance().warn("MySQL driver class not found.");
             Bukkit.getPluginManager().disablePlugin(MistPlugin.getInstance());
             return;
         }
@@ -77,7 +77,7 @@ public class SQLEconomy implements Economy {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            MistPlugin.warn(e.getMessage());
+            MistPlugin.getInstance().warn(e.getMessage());
             return false;
         }
         return true;
@@ -101,7 +101,7 @@ public class SQLEconomy implements Economy {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            MistPlugin.warn(e.getMessage());
+            MistPlugin.getInstance().warn(e.getMessage());
             return false;
         }
         return true;
@@ -128,7 +128,7 @@ public class SQLEconomy implements Economy {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            MistPlugin.warn(e.getMessage());
+            MistPlugin.getInstance().warn(e.getMessage());
             return false;
         }
         return true;
@@ -166,7 +166,7 @@ public class SQLEconomy implements Economy {
             }
             return playerData;
         } catch (SQLException e) {
-            MistPlugin.warn(e.getMessage());
+            MistPlugin.getInstance().warn(e.getMessage());
             return null;
         }
     }

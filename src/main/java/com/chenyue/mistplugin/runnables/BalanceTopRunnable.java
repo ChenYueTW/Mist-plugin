@@ -13,7 +13,7 @@ public class BalanceTopRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        List<PlayerBalance> btop = new ArrayList<PlayerBalance>(MistPlugin.getEco().getPlayers());
+        List<PlayerBalance> btop = new ArrayList<PlayerBalance>(MistPlugin.getInstance().getEco().getPlayers());
         btop.sort(Comparator.comparingDouble(PlayerBalance::getBalance).reversed());
         this.balanceTop = btop;
     }

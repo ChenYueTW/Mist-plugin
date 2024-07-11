@@ -1,7 +1,7 @@
 package com.chenyue.mistplugin.events;
 
 import com.chenyue.mistplugin.MistPlugin;
-import com.chenyue.mistplugin.data.WarpManager;
+import com.chenyue.mistplugin.managers.WarpManager;
 import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.StringUtils;
 import org.bukkit.Bukkit;

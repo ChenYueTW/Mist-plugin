@@ -1,6 +1,6 @@
 package com.chenyue.mistplugin.events;
 
-import com.chenyue.mistplugin.data.HomeManager;
+import com.chenyue.mistplugin.managers.HomeManager;
 import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.StringUtils;
 import com.google.common.collect.ImmutableMap;

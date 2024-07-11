@@ -1,6 +1,7 @@
 package com.chenyue.mistplugin.commands.tempban;
 
-import com.chenyue.mistplugin.data.BanManager;
+import com.chenyue.mistplugin.managers.BanManager;
+import com.chenyue.mistplugin.utils.AbstractCommand;
 import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.StringUtils;
 import com.google.common.collect.ImmutableMap;
@@ -9,61 +10,62 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class TempBan implements TabExecutor, ColorUtils {
+public class TempBan extends AbstractCommand implements ColorUtils {
+    public static final String NAME = "tempban";
+    public static final String DESCRIPTION = "Temp Ban Player";
+    public static final String PERMISSION = "mist.command.tempban";
+    public static final String USAGE = "/tempban <time> <player> <reason>";
     private final BanManager banManager;
 
     public TempBan(BanManager banManager) {
+        super(NAME, DESCRIPTION, PERMISSION, USAGE);
         this.banManager = banManager;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (sender.hasPermission("mist.command.tempban") | sender.isOp()) {
-            if (args.length < 2) {
-                StringUtils.sendConfigMessage(sender, "messages.tempban.usage");
-                return true;
-            }
-            long time = this.parseTime(args[0]);
-            if (time <= 0) {
-                StringUtils.sendConfigMessage(sender, "messages.tempban.invalid");
-                return true;
-            }
-            OfflinePlayer tempbanPlayer = Bukkit.getOfflinePlayer(args[1]);
-            if (tempbanPlayer == null) {
-                StringUtils.sendConfigMessage(sender, "messages.tempban.playerNotFound");
-                return true;
-            }
-            String reason = args.length > 2 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)) : "No Reason";
-            Date expiryDate = new Date(System.currentTimeMillis() + time);
-            this.banManager.tempBanPlayer(tempbanPlayer.getUniqueId(), reason, expiryDate);
-            Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(tempbanPlayer.getName(), reason, expiryDate, sender.getName());
-            if (tempbanPlayer.isOnline()) ((Player) tempbanPlayer).kickPlayer(color("你被TEMPBAN了!\n原因: " + reason));
-            StringUtils.sendConfigMessage(sender, "messages.tempban.success", ImmutableMap.of(
-                    "%player%", tempbanPlayer.getName(),
-                    "%reason%", reason
-            ));
-            return true;
-        } else {
-            StringUtils.sendConfigMessage(sender, "messages.noPermission");
+        if (!this.hasPermission(sender)) {
+            this.noPermission(sender);
             return true;
         }
+        if (args.length < 2) {
+            StringUtils.sendConfigMessage(sender, "messages.tempban.usage");
+            return true;
+        }
+        long time = this.parseTime(args[0]);
+        if (time <= 0) {
+            StringUtils.sendConfigMessage(sender, "messages.tempban.invalid");
+            return true;
+        }
+        OfflinePlayer tempBanPlayer = Bukkit.getOfflinePlayer(args[1]);
+        if (tempBanPlayer == null) {
+            StringUtils.sendConfigMessage(sender, "messages.tempban.playerNotFound");
+            return true;
+        }
+        String reason = args.length > 2 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)) : "No Reason";
+        Date expiryDate = new Date(System.currentTimeMillis() + time);
+        this.banManager.tempBanPlayer(tempBanPlayer.getUniqueId(), reason, expiryDate);
+        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(Objects.requireNonNull(tempBanPlayer.getName()), reason, expiryDate, sender.getName());
+        if (tempBanPlayer.isOnline()) ((Player) tempBanPlayer).kickPlayer(color("你被TEMPBAN了!\n原因: " + reason));
+        StringUtils.sendConfigMessage(sender, "messages.tempban.success", ImmutableMap.of(
+                "%player%", tempBanPlayer.getName(),
+                "%reason%", reason
+        ));
+        return true;
+
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-          return Arrays.asList("1s", "1m", "1h", "1d");
+            return Arrays.asList("1s", "1m", "1h", "1d");
         } else if (args.length == 2) {
             return null;
         }
@@ -75,20 +77,13 @@ public class TempBan implements TabExecutor, ColorUtils {
         char unit = time.charAt(time.length() - 1);
         long value = Long.parseLong(time.substring(0, time.length() - 1));
 
-        switch (unit) {
-            case 's':
-                duration = TimeUnit.SECONDS.toMillis(value);
-                break;
-            case 'm':
-                duration = TimeUnit.MINUTES.toMillis(value);
-                break;
-            case 'h':
-                duration = TimeUnit.HOURS.toMillis(value);
-                break;
-            case 'd':
-                duration = TimeUnit.DAYS.toMillis(value);
-                break;
-        }
+        duration = switch (unit) {
+            case 's' -> TimeUnit.SECONDS.toMillis(value);
+            case 'm' -> TimeUnit.MINUTES.toMillis(value);
+            case 'h' -> TimeUnit.HOURS.toMillis(value);
+            case 'd' -> TimeUnit.DAYS.toMillis(value);
+            default -> duration;
+        };
         return duration;
     }
 }

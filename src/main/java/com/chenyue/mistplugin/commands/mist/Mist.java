@@ -1,20 +1,25 @@
 package com.chenyue.mistplugin.commands.mist;
 
 import com.chenyue.mistplugin.commands.mist.SubCommands.Reload;
+import com.chenyue.mistplugin.utils.AbstractCommand;
 import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.SubCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mist implements TabExecutor, ColorUtils {
+public class Mist extends AbstractCommand implements ColorUtils {
+    public static final String NAME = "Mist Command";
+    public static final String DESCRIPTION = "mist";
+    public static final String PERMISSION = "mist.command.mist";
+    public static final String USAGE = "";
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
     public Mist() {
+        super(NAME, DESCRIPTION, PERMISSION, USAGE);
         // Add SubCommands
         this.subCommands.add(new Reload());
     }
@@ -27,7 +32,7 @@ public class Mist implements TabExecutor, ColorUtils {
                     this.getSubCommands().get(i).perform(sender, args);
                 }
             }
-        } else if (args.length == 0) {
+        } else {
             sender.sendMessage(color("&b----------&r&4[&r&eMist Plugin&r&4]&r&b----------"));
             for (int i = 0; i < this.getSubCommands().size(); i++) {
                 sender.sendMessage(this.getSubCommands().get(i).getName() + " - " + this.getSubCommands().get(i).getDescription());

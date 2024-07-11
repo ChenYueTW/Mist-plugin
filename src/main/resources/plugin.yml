@@ -67,6 +67,8 @@ commands:
     description: hat
   suicide:
     description: suicide
+  workbench:
+    description: Workbench
 
 permissions:
   mist.command.balance:

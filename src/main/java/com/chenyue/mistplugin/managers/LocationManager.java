@@ -1,4 +1,4 @@
-package com.chenyue.mistplugin.data;
+package com.chenyue.mistplugin.managers;
 
 import com.chenyue.mistplugin.MistPlugin;
 import com.google.gson.Gson;

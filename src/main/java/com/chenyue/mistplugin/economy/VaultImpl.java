@@ -62,7 +62,7 @@ public class VaultImpl implements Economy {
     }
 
     private boolean createAccount(UUID uuid) {
-        return MistPlugin.getEco().createAccount(uuid);
+        return MistPlugin.getInstance().getEco().createAccount(uuid);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class VaultImpl implements Economy {
     }
 
     private EconomyResponse deposit(UUID uuid, double amount) {
-        if (!MistPlugin.getEco().deposit(uuid, amount)) {
+        if (!MistPlugin.getInstance().getEco().deposit(uuid, amount)) {
             return new EconomyResponse(0.0, 0.0, ResponseType.FAILURE, "Failed to deposit funds.");
         }
         return new EconomyResponse(amount, this.getBalance(uuid), ResponseType.SUCCESS, "");
@@ -113,7 +113,7 @@ public class VaultImpl implements Economy {
     }
 
     private double getBalance(UUID uuid) {
-        return MistPlugin.getEco().getBalance(uuid).getBalance();
+        return MistPlugin.getInstance().getEco().getBalance(uuid).getBalance();
     }
 
     @Override
@@ -142,7 +142,7 @@ public class VaultImpl implements Economy {
     }
 
     private boolean has(UUID uuid, double amount) {
-        return MistPlugin.getEco().has(uuid, amount);
+        return MistPlugin.getInstance().getEco().has(uuid, amount);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class VaultImpl implements Economy {
     }
 
     private boolean hasAccount(UUID uuid) {
-        return MistPlugin.getEco().hasAccount(uuid);
+        return MistPlugin.getInstance().getEco().hasAccount(uuid);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class VaultImpl implements Economy {
     }
 
     private EconomyResponse withdraw(UUID uuid, double amount) {
-        if (!MistPlugin.getEco().withdraw(uuid, amount)) {
+        if (!MistPlugin.getInstance().getEco().withdraw(uuid, amount)) {
             return new EconomyResponse(0.0, 0.0, ResponseType.FAILURE, "Failed to withdraw funds.");
         }
         return new EconomyResponse(amount, this.getBalance(uuid), ResponseType.SUCCESS, "");

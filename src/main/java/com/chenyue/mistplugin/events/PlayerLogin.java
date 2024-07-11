@@ -1,6 +1,6 @@
 package com.chenyue.mistplugin.events;
 
-import com.chenyue.mistplugin.data.BanManager;
+import com.chenyue.mistplugin.managers.BanManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;

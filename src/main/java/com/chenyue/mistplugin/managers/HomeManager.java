@@ -1,4 +1,4 @@
-package com.chenyue.mistplugin.data;
+package com.chenyue.mistplugin.managers;
 
 import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.utils.StringUtils;
@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class HomeManager {
     private final File playerHomeDir = new File(MistPlugin.getInstance().getDataFolder(), "playerHomes");

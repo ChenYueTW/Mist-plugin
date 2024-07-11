@@ -1,30 +1,36 @@
 package com.chenyue.mistplugin.commands.suicide;
 
-import com.chenyue.mistplugin.utils.StringUtils;
+import com.chenyue.mistplugin.utils.AbstractCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Suicide implements TabExecutor {
+public class Suicide extends AbstractCommand {
+    public static final String NAME = "suicide";
+    public static final String DESCRIPTION = "Set Health = 0";
+    public static final String PERMISSION = "mist.command.suicide";
+    public static final String USAGE = "/suicide";
+
+    public Suicide() {
+        super(NAME, DESCRIPTION, PERMISSION, USAGE);
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        if (sender.hasPermission("mist.command.suicide") | sender.isOp()) {
-            if (!(sender instanceof Player)) {
-                StringUtils.sendConfigMessage(sender, "messages.playerOnly");
-                return true;
-            }
-            Player player = (Player) sender;
-            player.setHealth(0.0);
-            return true;
-        } else {
-            StringUtils.sendConfigMessage(sender, "messages.noPermission");
+        if (!this.hasPermission(sender)) {
+            this.noPermission(sender);
             return true;
         }
+        if (!(sender instanceof Player player)) {
+            this.playerOnly(sender);
+            return true;
+        }
+        player.setHealth(0.0);
+        return true;
     }
 
     @Override
