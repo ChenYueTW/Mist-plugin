@@ -1,5 +1,6 @@
 package com.chenyue.mistplugin.commands.tempban;
 
+import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.managers.BanManager;
 import com.chenyue.mistplugin.utils.AbstractCommand;
 import com.chenyue.mistplugin.utils.ColorUtils;
@@ -52,14 +53,12 @@ public class TempBan extends AbstractCommand implements ColorUtils {
         String reason = args.length > 2 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)) : "No Reason";
         Date expiryDate = new Date(System.currentTimeMillis() + time);
         this.banManager.tempBanPlayer(tempBanPlayer.getUniqueId(), reason, expiryDate);
-        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(Objects.requireNonNull(tempBanPlayer.getName()), reason, expiryDate, sender.getName());
         if (tempBanPlayer.isOnline()) ((Player) tempBanPlayer).kickPlayer(color("你被TEMPBAN了!\n原因: " + reason));
-        StringUtils.sendConfigMessage(sender, "messages.tempban.success", ImmutableMap.of(
-                "%player%", tempBanPlayer.getName(),
+        StringUtils.sendConfigMessage((Player) sender, "messages.tempban.success", ImmutableMap.of(
+                "%player%", Objects.requireNonNull(tempBanPlayer.getName()),
                 "%reason%", reason
         ));
         return true;
-
     }
 
     @Override

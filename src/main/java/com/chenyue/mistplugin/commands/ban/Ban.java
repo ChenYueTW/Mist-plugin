@@ -48,7 +48,6 @@ public class Ban extends AbstractCommand implements ColorUtils {
         }
         String reason = args.length > 1 ? String.join(" ", Arrays.copyOfRange(args, 1, args.length)) : "No Reason";
         this.banManager.banPlayer(banPlayer.getUniqueId(), reason);
-        Bukkit.getServer().getBanList(BanList.Type.NAME).addBan(Objects.requireNonNull(banPlayer.getName()), reason, null, sender.getName());
 
         if (banPlayer.isOnline()) ((Player) banPlayer).kickPlayer(color("&c你被伺服器BAN了!\n原因: " + reason));
 

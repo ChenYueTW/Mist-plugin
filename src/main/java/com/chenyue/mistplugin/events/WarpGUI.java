@@ -4,6 +4,7 @@ import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.managers.WarpManager;
 import com.chenyue.mistplugin.utils.ColorUtils;
 import com.chenyue.mistplugin.utils.StringUtils;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -99,7 +100,9 @@ public class WarpGUI implements Listener, ColorUtils {
                 if (warpLocation != null) {
                     player.teleport(warpLocation);
                     player.setFallDistance(0);
-                    StringUtils.sendConfigMessage(player, "messages.warp.successful");
+                    StringUtils.sendConfigMessage(player, "messages.warp.successful", ImmutableMap.of(
+                            "%name%", warpName
+                    ));
                     player.closeInventory();
                 }
             }

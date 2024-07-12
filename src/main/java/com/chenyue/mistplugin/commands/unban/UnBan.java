@@ -5,6 +5,7 @@ import com.chenyue.mistplugin.utils.AbstractCommand;
 import com.chenyue.mistplugin.utils.StringUtils;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class UnBan extends AbstractCommand {
     public static final String NAME = "unban";
@@ -36,15 +38,14 @@ public class UnBan extends AbstractCommand {
             StringUtils.sendConfigMessage(sender, "messages.unban.usage");
             return true;
         }
-
-        Player unbanPlayer = Bukkit.getPlayer(args[0]);
+        OfflinePlayer unbanPlayer = Bukkit.getOfflinePlayer(args[0]);
         if (unbanPlayer == null) {
             StringUtils.sendConfigMessage(sender, "messages.unban.playerNotfound");
             return true;
         }
         this.banManager.unbanPlayer(unbanPlayer.getUniqueId());
         StringUtils.sendConfigMessage(sender, "messages.unban.success", ImmutableMap.of(
-                "%player%", unbanPlayer.getName()
+                "%player%", Objects.requireNonNull(unbanPlayer.getName())
         ));
         return true;
 

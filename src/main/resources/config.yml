@@ -1,5 +1,5 @@
 # 玩家進入時訊息
-Welcome_MSG: " 進入了 工程測試區!"
+Welcome_MSG: " &b進入了 工程測試區!"
 # Shift + F後執行的指令
 ShiftF_CMD: "help"
 # SetHome上限
@@ -143,6 +143,8 @@ messages:
         - "%prefix% &6已支付 &a%amount% &6給 &e%player%"
       received:
         - "%prefix% &6已收到 &e%player% 支付的 &a%amount%"
+      insufficientFunds:
+        - "%prefix% &c你沒有足夠的金錢"
 
     top:
       usage:
@@ -229,17 +231,19 @@ messages:
     tpaHereCancelUsage:
       - "%prefix% &e/tpaherecancel"
     tpaSendRequest:
-      - "%prefix% &6已對 &e%player% &6發送傳送請求"
+      - "%prefix% &6已對 &e%player% &6發送傳送請求 &e限時60秒"
     tpaReceiveRequest:
       - "%prefix% &e%player% 發送傳送請求 &e到你身邊"
     tpaHereSendRequest:
-      - "%prefix% &6已對 &e%player% &6發送傳送請求"
+      - "%prefix% &6已對 &e%player% &6發送傳送請求 &e限時60秒"
     tpaHereReceiveRequest:
       - "%prefix% &e%player% &6發送傳送請求 &e到他身邊"
     acceptRequest:
-      - "%prefix% &6你&a接受&6了傳送請求"
+      - "%prefix% &6你 &e接受 &6了傳送請求"
     cancelRequest:
-      - "%prefix% &6你&a拒絕&6了傳送請求"
+      - "%prefix% &6你 &c拒絕 &6了傳送請求"
+    requestMaturity:
+      - "%prefix% &6傳送請求已到期"
     successfulTeleport:
       - "%prefix% &6傳送成功"
     requestNotFound:
@@ -289,7 +293,7 @@ messages:
     usage:
       - "%prefix% &e/warp {name}"
     successful:
-      - "%prefix% &6已傳送至Warp %e%name%"
+      - "%prefix% &6已傳送至Warp &e%name%"
     failed:
       - "%prefix% &c傳送失敗"
     notFound:
@@ -302,6 +306,7 @@ messages:
       - "%prefix% &c沒有找到玩家"
     success:
       - "%prefix% &6玩家 &e%player% &6已經被BAN了\n原因: %reason%"
+
   tempban:
     usage:
       - "%prefix% &e/tempban {time} {player_name} {reason}"
@@ -310,7 +315,8 @@ messages:
     playerNotFound:
       - "%prefix% &c沒有找到玩家"
     success:
-      "%prefix% &c玩家 &e%player% &6已經被TEMPBAN了\n原因: %reason%"
+      - "%prefix% &c玩家 &e%player% &6已經被TEMPBAN了\n原因: %reason%"
+
   unban:
     usage:
       - "%prefix% &e/unban {player}"
@@ -318,6 +324,7 @@ messages:
       - "%prefix% &c沒有找到玩家"
     success:
       - "%prefix% &e%player% 已經被UNBAN了"
+
   hat:
     usage:
       - "%prefix% &e/hat"

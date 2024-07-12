@@ -1,5 +1,6 @@
 package com.chenyue.mistplugin.managers;
 
+import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,10 +17,22 @@ public class TpManager {
 
     public void addTpaRequest(UUID player, UUID target) {
         this.tpaRequest.put(target, player);
+        this.scheduleRequestRemoval(player, true);
     }
 
     public void addTpaHereRequest(UUID player, UUID target) {
         this.tpaHereRequest.put(player, target);
+        this.scheduleRequestRemoval(player, false);
+    }
+
+    private void scheduleRequestRemoval(UUID playerUuid, boolean isTpa) {
+        Bukkit.getScheduler().runTaskLater(MistPlugin.getInstance(), () -> {
+            if (isTpa) this.tpaRequest.remove(playerUuid);
+            else this.tpaHereRequest.remove(playerUuid);
+
+            Player player = Bukkit.getPlayer(playerUuid);
+            if (player != null && player.isOnline()) StringUtils.sendConfigMessage(player, "messages.tp.requestMaturity");
+        }, 20 * 60); // 60 seconds
     }
 
     public void acceptTpaRequest(Player player) { // B
@@ -41,14 +54,7 @@ public class TpManager {
     }
 
     public void cancelTpaRequest(Player player) { // B
-        UUID teleporterUuid = null; // A
-
-        for (Map.Entry<UUID, UUID> entry : this.tpaRequest.entrySet()) {
-            if (entry.getValue().equals(player.getUniqueId())) {
-                teleporterUuid = entry.getKey();
-                break;
-            }
-        }
+        UUID teleporterUuid = this.tpaRequest.get(player.getUniqueId()); // A
 
         if (teleporterUuid == null) {
             StringUtils.sendConfigMessage(player, "messages.tp.requestNotFound");
@@ -77,14 +83,7 @@ public class TpManager {
     }
 
     public void cancelTpaHereRequest(Player player) { // A
-        UUID teleporterUuid = null; // B
-
-        for (Map.Entry<UUID, UUID> entry : this.tpaHereRequest.entrySet()) {
-            if (entry.getValue().equals(player.getUniqueId())) {
-                teleporterUuid = entry.getKey();
-                break;
-            }
-        }
+        UUID teleporterUuid = this.tpaHereRequest.get(player.getUniqueId()); // B
 
         if (teleporterUuid == null) {
             StringUtils.sendConfigMessage(player, "messages.tp.requestNotFound");

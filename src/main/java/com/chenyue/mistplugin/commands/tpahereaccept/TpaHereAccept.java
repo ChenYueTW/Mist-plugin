@@ -1,5 +1,6 @@
 package com.chenyue.mistplugin.commands.tpahereaccept;
 
+import com.chenyue.mistplugin.MistPlugin;
 import com.chenyue.mistplugin.managers.TpManager;
 import com.chenyue.mistplugin.utils.AbstractCommand;
 import com.chenyue.mistplugin.utils.StringUtils;
@@ -15,11 +16,11 @@ public class TpaHereAccept extends AbstractCommand {
     public static final String NAME = "tpahereaccept";
     public static final String DESCRIPTION = "Accept tpa here request";
     public static final String PERMISSION = "mist.command.tpahereaccept";
-    public static final String USAGE = "";
+    public static final String USAGE = "/tpahereaccept";
     private final TpManager tpManager;
 
     public TpaHereAccept(TpManager tpManager) {
-        super(NAME, DESCRIPTION, USAGE, PERMISSION);
+        super(NAME, DESCRIPTION, PERMISSION, USAGE);
         this.tpManager = tpManager;
     }
 

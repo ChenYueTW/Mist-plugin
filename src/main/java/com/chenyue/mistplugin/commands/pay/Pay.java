@@ -64,6 +64,7 @@ public class Pay extends AbstractCommand {
             StringUtils.sendConfigMessage(player, "messages.money.pay.cannotPaySelf");
             return true;
         }
+        // Pay amount
         double amount;
         try {
             amount = MistPlugin.getInstance().getAmountFromString(args[1]);
@@ -74,13 +75,14 @@ public class Pay extends AbstractCommand {
             return true;
         }
         if (amount <= 0) {
-            StringUtils.sendConfigMessage(sender, "messages.money.pay.invalidAmount", ImmutableMap.of());
+            StringUtils.sendConfigMessage(player, "messages.money.pay.invalidAmount");
             return true;
         }
         if (!MistPlugin.getInstance().getEco().has(player.getUniqueId(), amount)) {
             StringUtils.sendConfigMessage(player, "messages.money.pay.insufficientFunds");
             return true;
         }
+        MistPlugin.getInstance().getLogger().info(String.valueOf(amount));
         MistPlugin.getInstance().getEco().withdraw(player.getUniqueId(), amount);
         StringUtils.sendConfigMessage(player, "messages.money.pay.paid", ImmutableMap.of(
                 "%player%", Objects.requireNonNull(other.getName()),
