@@ -69,6 +69,10 @@ commands:
     description: suicide
   workbench:
     description: Workbench
+  enderchest:
+    description: EncoderChest
+  fly:
+    description: fly
 
 permissions:
   mist.command.balance:
@@ -121,3 +125,5 @@ permissions:
     default: op
   mist.command.suicide:
     default: true
+  mist.command.fly:
+    default: op

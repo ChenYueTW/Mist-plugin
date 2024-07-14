@@ -9,6 +9,8 @@ import com.chenyue.mistplugin.commands.delhome.DelHome;
 import com.chenyue.mistplugin.commands.delspawn.DelSpawn;
 import com.chenyue.mistplugin.commands.delwarp.DelWarp;
 import com.chenyue.mistplugin.commands.eco.Eco;
+import com.chenyue.mistplugin.commands.enderchest.EnderChest;
+import com.chenyue.mistplugin.commands.fly.Fly;
 import com.chenyue.mistplugin.commands.hat.Hat;
 import com.chenyue.mistplugin.commands.home.Home;
 import com.chenyue.mistplugin.commands.homevip.HomeVIP;
@@ -126,6 +128,8 @@ public final class MistPlugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("hat")).setExecutor(new Hat());
         Objects.requireNonNull(this.getCommand("suicide")).setExecutor(new Suicide());
         Objects.requireNonNull(this.getCommand("workbench")).setExecutor(new Workbench());
+        Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChest());
+        Objects.requireNonNull(this.getCommand("fly")).setExecutor(new Fly());
 
         // Listener
         this.getServer().getPluginManager().registerEvents(new ShiftFEvent(), this);
@@ -234,7 +238,7 @@ public final class MistPlugin extends JavaPlugin {
 
     // SQL
     private void addSqlColumns() {
-        this.sqlColumns.put("Balance", "DECIMAL(65, 2) NOT NULL DEFAULT " + getConfig().getDouble("startingBalance"));
+        this.sqlColumns.put("Balance", "DECIMAL(65, 2) NOT NULL DEFAULT " + this.getConfig().getDouble("startingBalance"));
     }
     public Map<String, String> getSqlColumns() {
         return this.sqlColumns;

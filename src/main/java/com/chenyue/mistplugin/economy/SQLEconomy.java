@@ -85,7 +85,7 @@ public class SQLEconomy implements Economy {
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        for (PlayerBalance pb : getPlayers()) {
+        for (PlayerBalance pb : this.getPlayers()) {
             if (pb.getUuid().equals(uuid)) {
                 return true;
             }
