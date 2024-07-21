@@ -73,6 +73,8 @@ commands:
     description: EncoderChest
   fly:
     description: fly
+  flyspeed:
+    description: flyspeed
 
 permissions:
   mist.command.balance:
@@ -126,4 +128,6 @@ permissions:
   mist.command.suicide:
     default: true
   mist.command.fly:
+    default: op
+  mist.command.flyspeed:
     default: op

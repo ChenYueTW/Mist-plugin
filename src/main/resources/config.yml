@@ -331,4 +331,12 @@ messages:
     airHand:
       - "%prefix% &c手上要有物品!"
     success:
-      - "%prefix% &6已將 %material% 戴在頭上!"
+      - "%prefix% &6已將 &a%material% &6戴在頭上!"
+
+  flyspeed:
+    failed:
+      - "%prefix% &c設置失敗"
+    cantZero:
+      - "%prefix% &c不能小於0"
+    success:
+      - "%prefix% &e已將飛行速度調至 &a%speed%"

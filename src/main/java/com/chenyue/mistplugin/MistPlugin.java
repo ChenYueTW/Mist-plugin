@@ -11,6 +11,7 @@ import com.chenyue.mistplugin.commands.delwarp.DelWarp;
 import com.chenyue.mistplugin.commands.eco.Eco;
 import com.chenyue.mistplugin.commands.enderchest.EnderChest;
 import com.chenyue.mistplugin.commands.fly.Fly;
+import com.chenyue.mistplugin.commands.flyspeed.FlySpeed;
 import com.chenyue.mistplugin.commands.hat.Hat;
 import com.chenyue.mistplugin.commands.home.Home;
 import com.chenyue.mistplugin.commands.homevip.HomeVIP;
@@ -100,36 +101,14 @@ public final class MistPlugin extends JavaPlugin {
         ConfigHandler.reloadConfig();
 
         // Init Cmd
-        Objects.requireNonNull(this.getCommand("eco")).setExecutor(new Eco());
-        Objects.requireNonNull(this.getCommand("balance")).setExecutor(new Balance());
-        Objects.requireNonNull(this.getCommand("balancetop")).setExecutor(new BalanceTop());
-        Objects.requireNonNull(this.getCommand("pay")).setExecutor(new Pay());
+        this.registerEconomy();
+        this.registerTeleport();
+        this.registerTeleportPoint();
+        this.registerAdmin();
+        this.registerVip();
         Objects.requireNonNull(this.getCommand("mist")).setExecutor(new Mist());
-        Objects.requireNonNull(this.getCommand("spawn")).setExecutor(new Spawn());
-        Objects.requireNonNull(this.getCommand("setspawn")).setExecutor(new SetSpawn());
-        Objects.requireNonNull(this.getCommand("delspawn")).setExecutor(new DelSpawn());
-        Objects.requireNonNull(this.getCommand("home")).setExecutor(new Home(this.homeManager, new HomeGUI(this.homeManager)));
-        Objects.requireNonNull(this.getCommand("sethome")).setExecutor(new SetHome(this.homeManager));
-        Objects.requireNonNull(this.getCommand("delhome")).setExecutor(new DelHome(this.homeManager));
-        Objects.requireNonNull(this.getCommand("homevip")).setExecutor(new HomeVIP(this.homeManager));
-        Objects.requireNonNull(this.getCommand("tpa")).setExecutor(new Tpa(this.tpManager));
-        Objects.requireNonNull(this.getCommand("tpahere")).setExecutor(new TpaHere(this.tpManager));
-        Objects.requireNonNull(this.getCommand("tpaaccept")).setExecutor(new TpaAccept(this.tpManager));
-        Objects.requireNonNull(this.getCommand("tpacancel")).setExecutor(new TpaCancel(this.tpManager));
-        Objects.requireNonNull(this.getCommand("tpahereaccept")).setExecutor(new TpaHereAccept(this.tpManager));
-        Objects.requireNonNull(this.getCommand("tpaherecancel")).setExecutor(new TpaHereCancel(this.tpManager));
-        Objects.requireNonNull(this.getCommand("back")).setExecutor(new Back(this.locationManager));
-        Objects.requireNonNull(this.getCommand("warp")).setExecutor(new Warp(this.warpManager, new WarpGUI(this.warpManager)));
-        Objects.requireNonNull(this.getCommand("setwarp")).setExecutor(new SetWarp(this.warpManager));
-        Objects.requireNonNull(this.getCommand("delwarp")).setExecutor(new DelWarp(this.warpManager));
-        Objects.requireNonNull(this.getCommand("ban")).setExecutor(new Ban(this.banManager));
-        Objects.requireNonNull(this.getCommand("tempban")).setExecutor(new TempBan(this.banManager));
-        Objects.requireNonNull(this.getCommand("unban")).setExecutor(new UnBan(this.banManager));
         Objects.requireNonNull(this.getCommand("hat")).setExecutor(new Hat());
         Objects.requireNonNull(this.getCommand("suicide")).setExecutor(new Suicide());
-        Objects.requireNonNull(this.getCommand("workbench")).setExecutor(new Workbench());
-        Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChest());
-        Objects.requireNonNull(this.getCommand("fly")).setExecutor(new Fly());
 
         // Listener
         this.getServer().getPluginManager().registerEvents(new ShiftFEvent(), this);
@@ -151,6 +130,49 @@ public final class MistPlugin extends JavaPlugin {
             throw new RuntimeException(e);
         }
         this.getLogger().info("Plugin disabled");
+    }
+
+    private void registerEconomy() {
+        Objects.requireNonNull(this.getCommand("eco")).setExecutor(new Eco());
+        Objects.requireNonNull(this.getCommand("balance")).setExecutor(new Balance());
+        Objects.requireNonNull(this.getCommand("balancetop")).setExecutor(new BalanceTop());
+        Objects.requireNonNull(this.getCommand("pay")).setExecutor(new Pay());
+    }
+
+    private void registerTeleport() {
+        Objects.requireNonNull(this.getCommand("tpa")).setExecutor(new Tpa(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpahere")).setExecutor(new TpaHere(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpaaccept")).setExecutor(new TpaAccept(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpacancel")).setExecutor(new TpaCancel(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpahereaccept")).setExecutor(new TpaHereAccept(this.tpManager));
+        Objects.requireNonNull(this.getCommand("tpaherecancel")).setExecutor(new TpaHereCancel(this.tpManager));
+        Objects.requireNonNull(this.getCommand("back")).setExecutor(new Back(this.locationManager));
+    }
+
+    private void registerTeleportPoint() {
+        Objects.requireNonNull(this.getCommand("spawn")).setExecutor(new Spawn());
+        Objects.requireNonNull(this.getCommand("setspawn")).setExecutor(new SetSpawn());
+        Objects.requireNonNull(this.getCommand("delspawn")).setExecutor(new DelSpawn());
+        Objects.requireNonNull(this.getCommand("home")).setExecutor(new Home(this.homeManager, new HomeGUI(this.homeManager)));
+        Objects.requireNonNull(this.getCommand("sethome")).setExecutor(new SetHome(this.homeManager));
+        Objects.requireNonNull(this.getCommand("delhome")).setExecutor(new DelHome(this.homeManager));
+        Objects.requireNonNull(this.getCommand("warp")).setExecutor(new Warp(this.warpManager, new WarpGUI(this.warpManager)));
+        Objects.requireNonNull(this.getCommand("setwarp")).setExecutor(new SetWarp(this.warpManager));
+        Objects.requireNonNull(this.getCommand("delwarp")).setExecutor(new DelWarp(this.warpManager));
+    }
+
+    private void registerAdmin() {
+        Objects.requireNonNull(this.getCommand("ban")).setExecutor(new Ban(this.banManager));
+        Objects.requireNonNull(this.getCommand("tempban")).setExecutor(new TempBan(this.banManager));
+        Objects.requireNonNull(this.getCommand("unban")).setExecutor(new UnBan(this.banManager));
+        Objects.requireNonNull(this.getCommand("fly")).setExecutor(new Fly());
+        Objects.requireNonNull(this.getCommand("flyspeed")).setExecutor(new FlySpeed());
+    }
+
+    private void registerVip() {
+        Objects.requireNonNull(this.getCommand("homevip")).setExecutor(new HomeVIP(this.homeManager));
+        Objects.requireNonNull(this.getCommand("workbench")).setExecutor(new Workbench());
+        Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChest());
     }
 
     public void warn(String message) {
